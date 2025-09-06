@@ -3,7 +3,7 @@ import "./CartItems.css";
 import "./CartSummary.css";
 import products from "../../data/products";
 import QtyControls from "../../components/QtyControls/QtyControls";
-
+import { purchaseCart, verifyStock } from "../../services/product-api";
 
 function Cart() {
   const { cart, addToCart, removeFromCart, totalItems } = useCart(); //userCartContext
@@ -81,7 +81,9 @@ function Cart() {
             .toFixed(2)}</p>
         </div>
         <hr />
-        
+        <button className="checkout-btn" onClick={() => 
+          verifyStock(cart) ? purchaseCart(cart) : alert("Stock insuficiente")
+        }>Comprar</button>
       </div>
     </div>
   );
