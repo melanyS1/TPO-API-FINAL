@@ -1,7 +1,9 @@
 import { useCart } from "../../Context/CartContext";
-import "./Cart.css";
+import "./CartItems.css";
+import "./CartSummary.css";
 import products from "../../data/products";
 import QtyControls from "../../components/QtyControls/QtyControls";
+
 
 function Cart() {
   const { cart, addToCart, removeFromCart, totalItems } = useCart(); //userCartContext
@@ -38,10 +40,7 @@ function Cart() {
                   </div>
                   <div>
                     <p>{item.name}</p>
-                    <button
-                      className="delete-btn"
-                      onClick={() => removeFromCart(item.id)}
-                    >
+                    <button className="delete-btn" onClick={() => removeFromCart(item.id)}>
                       Eliminar
                     </button>
                   </div>
@@ -65,15 +64,24 @@ function Cart() {
           </ul>
         )}
       </div>
+
       <div className="cart-summary">
-        <h1>Resumen de compra</h1>
-        <p>Productos: {totalItems}</p>
-        <p>
-          Total:{" "}
-          {cart.items
+        <h3>Resumen de compra</h3>
+        <hr />
+        <div className="summary-row">
+          <p>Productos ({totalItems})</p>
+          <p>${cart.items
             .reduce((total, item) => total + item.price * item.qty, 0)
-            .toFixed(2)}
-        </p>
+            .toFixed(2)}</p>
+        </div>
+        <div className="summary-row-total">
+          <p>Total</p>
+          <p>${cart.items
+            .reduce((total, item) => total + item.price * item.qty, 0)
+            .toFixed(2)}</p>
+        </div>
+        <hr />
+        
       </div>
     </div>
   );
