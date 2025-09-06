@@ -6,7 +6,7 @@ const initialState = { items: [] };
 function reducer(state, action) {
   switch (action.type) {
     case "ADD": {
-      const { id, name, price, qty, stock } = action.payload;
+      const { id, name, price, qty, stock, image } = action.payload;
       const exists = state.items.find((i) => i.id === id);
       const items = exists
         ? state.items.map((i) =>
@@ -14,7 +14,7 @@ function reducer(state, action) {
           )
         : [
             ...state.items,
-            { id, name, price, qty: Math.min(qty, stock), stock },
+            { id, name, price, qty: Math.min(qty, stock), stock, image },
           ];
       return { ...state, items };
     }
