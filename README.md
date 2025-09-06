@@ -2,7 +2,7 @@
 Integrantes:
 - 
 - Gabriela Elizabeth Méndez Gutiérrez LU: 1134426
-- 
+- Melany Serquen; LU: 1151801
 -
 -
 -
