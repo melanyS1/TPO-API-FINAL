@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
+import App from "./App.jsx";
+import { useCart } from "./Context/CartContext.jsx";
 import "./index.css";
-import { CartProvider, useCart } from "./Context/CartContext.jsx";
-import ProductDetail from "./pages/ProductDetail.jsx";
 
 // Genera un nombre de usuario random
 function getRandomUser() {
@@ -62,23 +62,9 @@ function HeaderLite() {
   );
 }
 
-function Root() {
-  return (
-    <CartProvider>
-      <BrowserRouter>
-        <HeaderLite />
-        <Routes>
-          <Route path="/" element={<ProductDetail />} />
-          <Route path="/producto/:id" element={<ProductDetail />} />
-        </Routes>
-      </BrowserRouter>
-    </CartProvider>
-  );
-}
-
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Root />
+    <App />
   </StrictMode>
 );
 
