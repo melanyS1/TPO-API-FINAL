@@ -30,7 +30,7 @@ const LoginUser = () => {
     <div className="login-page">
       <div className="login-container">
         <div className="login-left">
-          <h1>Ingresá tu e-mail o teléfono para iniciar sesión</h1>
+          <h1>Ingresá tu e-mail para iniciar sesión</h1>
           <p className="help-link">Necesito ayuda</p>
         </div>
 
