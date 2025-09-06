@@ -25,44 +25,7 @@
 .item-title .delete-btn:hover {
     background: #969696;
 }
-.qty-controls {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background: #f8f8f8;
-    overflow: hidden;
-    box-shadow: 0 1px 4px #0001;
-    margin-bottom: 4px;
-}
-.qty-controls button {
-    background: #e0e0e0;
-    border: none;
-    color: #333;
-    font-size: 1.2em;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-    transition: background 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.qty-controls button:disabled {
-    background: #f0f0f0;
-    color: #aaa;
-    cursor: not-allowed;
-}
-.qty-controls button:hover:not(:disabled) {
-    background: #d0d0d0;
-}
-.qty-controls p {
-    margin: 0 12px;
-    min-width: 24px;
-    text-align: center;
-    font-size: 1.1em;
-    font-weight: 500;
-}
+
 .cart-page {
     width: 100%;
     display: flex;
@@ -115,12 +78,6 @@
     min-width: 100px;
 }
 
-.cart-item-qty .qty-available {
-    margin-top: 4px;
-    margin-bottom: 0;
-    font-size: 0.95em;
-    color: #555;
-}
 
 .cart-item-qty p {
     display: inline;
