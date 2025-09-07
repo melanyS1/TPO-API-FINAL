@@ -74,15 +74,19 @@
   "categories": [
     {
       "id": "1",
-      "name": "Proyectores Básicos"
+      "name": "Audio y Video"
     },
     {
       "id": "2",
-      "name": "Proyectores Avanzados"
+      "name": "Celulares y Accesorios"
     },
     {
       "id": "3",
-      "name": "Proyectores Profesionales"
+      "name": "Electro y Hogar"
+    },
+    {
+      "id": "4",
+      "name": "Informática"
     }
   ],
   "session": {

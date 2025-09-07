@@ -117,27 +117,40 @@
   top: 100%;
   left: 0;
   background: #2c2c2c;
-  padding: 10px;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  min-width: 200px;
+  padding: 3px 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  min-width: 250px;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
 }
 
 .submenu li {
-  padding: 5px 0;
+  padding: 0;
+  width: 100%;
 }
 
 .submenu a {
   display: block;
-  padding: 5px 10px;
+  padding: 2px 5px;
   color: white;
   text-decoration: none;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+  font-size: 0.95em;
 }
 
 .submenu a:hover {
   background: #3483fa;
-  border-radius: 4px;
+  padding-left: 15px;
+}
+
+.submenu-divider {
+  margin: 4px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: calc(100% - 40px);
 }
   background: transparent;
   border: 1px solid white;

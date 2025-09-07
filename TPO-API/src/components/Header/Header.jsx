@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CartPopOver from "../CartPopOver/CartPopOver";
 import { useCart } from "../../Context/CartContext";
@@ -10,11 +10,34 @@ const Header = () => {
   const { user, isAuthenticated, logout } = useUser();
   const navigate = useNavigate();
   const [openCategories, setOpenCategories] = useState(false);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/categories')
+      .then(response => response.json())
+      .then(data => setCategories(data))
+      .catch(error => console.error('Error loading categories:', error));
+  }, []);
 
   const handleLogout = () => {
     logout();
     navigate("/");
   };
+
+  // Referencia para el menú desplegable
+  const menuRef = useRef(null);
+
+  // Cerrar el menú cuando se hace click fuera
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpenCategories(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   return (
     <>
       <header className="header">
@@ -46,18 +69,30 @@ const Header = () => {
         <nav className="nav">
           <ul>
             <li><Link to="/">Inicio</Link></li>
-            <li><Link to="/products">Productos</Link></li>
-
-            <li style={{ position: "relative", cursor: "pointer" }}>
+            <li ref={menuRef} style={{ position: "relative", cursor: "pointer" }}>
               <span onClick={() => setOpenCategories(!openCategories)}>
-                Categorías {openCategories ? "▴" : "▾"}
+                Productos {openCategories ? "▴" : "▾"}
               </span>
               {openCategories && (
                 <ul className="submenu">
-                  <li><Link to="/categories/tecnologia">Tecnología</Link></li>
-                  <li><Link to="/categories/electrodomesticos">Electrodomésticos</Link></li>
-                  <li><Link to="/categories/hogar">Hogar</Link></li>
-                  <li><Link to="/categories/muebles">Muebles</Link></li>
+                  {/* Opción para ver todos los productos */}
+                  <li><Link to="/products" onClick={() => setOpenCategories(false)}>Todos los productos</Link></li>
+                  {categories.length > 0 && (
+                    <>
+                      <li className="submenu-divider"></li>
+                      {/* Categorías cargadas dinámicamente del servidor */}
+                      {categories.map(category => (
+                        <li key={category.id}>
+                          <Link 
+                            to={`/products/category/${category.id}`}
+                            onClick={() => setOpenCategories(false)}
+                          >
+                            {category.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </>
+                  )}
                 </ul>
               )}
             </li>
