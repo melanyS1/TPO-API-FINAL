@@ -78,6 +78,7 @@
     list-style: none;
     text-decoration: none;
     padding-left: 0; /* Elimina el padding por defecto de la lista */
+    margin-top: 0; /* Elimina el margen por defecto de la lista */
 }
 
 .cart-items li {
