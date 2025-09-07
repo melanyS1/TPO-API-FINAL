@@ -33,4 +33,9 @@ function verifyStock(cart) {
     return true; // Stock suficiente
 }
 
-export { purchaseCart, verifyStock };
+function shippingCost(cart) {
+  const total = cart.items.reduce((sum, item) => sum + item.price * item.qty, 0);
+  return total >= 100 ? { amount: 0 } : { amount: 10 }; // Envío gratis para compras mayores a $100
+}
+
+export { purchaseCart, verifyStock, shippingCost };
