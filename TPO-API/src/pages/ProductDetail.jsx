@@ -41,7 +41,7 @@ export default function ProductDetail() {
           </label>
           <button
             disabled={!inStock || qty < 1 || qty > max}
-            onClick={() => { addToCart(product, qty); alert(`Agregado x${qty}`); }}
+            onClick={() => { addToCart(product, qty); }}
           >
             Agregar al carrito 🛒
           </button>
