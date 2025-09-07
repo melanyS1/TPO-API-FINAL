@@ -39,13 +39,15 @@ function Cart() {
         totalItems={totalItems}
         cart={cart}
         onCheckout={() => {
-          if (verifyStock(cart)) {
+          verifyStock(cart).then((isStockSufficient) => {
+            if (!isStockSufficient) {
+              alert("Stock insuficiente");
+              return;
+            }
             purchaseCart(cart);
             navigate("/thank-you");
             clearCart();
-          } else {
-            alert("Stock insuficiente");
-          }
+          });
         }}
       />
     </div>

@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useCart } from "../Context/CartContext.jsx";
-import { getProductById } from "../data/products";
 import ProductRow from "./ProductRow";
 import { useNavigate } from "react-router-dom";
+import useGetProductById from "../hooks/useGetProductById";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = useMemo(() => getProductById(id), [id]);
+  const product = useGetProductById(id);
   const { addToCart, setShowCartPopOver } = useCart();
   const [qty, setQty] = useState(1);
 

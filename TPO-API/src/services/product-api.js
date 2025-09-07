@@ -1,36 +1,37 @@
-import products from "../data/products";
-
 function purchaseCart(cart) {
   // Lógica para procesar la compra del carrito
+
   if (cart.items.length === 0) {
     console.log("El carrito está vacío. No se puede procesar la compra.");
     return;
   }
 
-  if (!verifyStock(cart)) {
-    console.log("No hay suficiente stock para completar la compra.");
-    return;
-  }else {
-    // Reducir el stock de los productos
-    cart.items.forEach((item) => {
-      const product = products.find((p) => p.id === item.id);
-      if (product) {
-        product.stock -= item.qty;
-      }
-    });
+  verifyStock(cart).then((isStockSufficient) => {
+    if (!isStockSufficient) {
+      console.log("No hay suficiente stock para completar la compra.");
+      return;
+    } else {
+      cart.items.forEach((item) => {
+        getProductById(item.id).then((product) => {
+          if (product) {
+            partialUpdateProductStock(product.id, product.stock - item.qty);
+          }
+        });
+      });
     }
-  console.log("Procesando compra para el carrito:", cart);
-  console.log("Estado del inventario después de la compra:", products);
+  });
 }
 
 function verifyStock(cart) {
-  for (let item of cart.items) {
-    const product = products.find((p) => p.id === item.id);
-    if (!product || product.stock < item.qty) {
-      return false; // Stock insuficiente
+  return getProducts().then((products) => {
+    for (let item of cart.items) {
+      const product = products.find((p) => p.id === item.id);
+      if (!product || product.stock < item.qty) {
+        return false; // Stock insuficiente
+      }
     }
-  }
     return true; // Stock suficiente
+  });
 }
 
 function getProducts() {
@@ -46,4 +47,27 @@ function getProducts() {
     });
 }
 
-export { purchaseCart, verifyStock, getProducts};
+function getProductById(id) {
+  return fetch(`http://localhost:3000/products/${id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      // Aquí puedes manejar los datos de los productos
+      console.log("Producto obtenido:", data);
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error al obtener producto:", error);
+    });
+}
+
+function partialUpdateProductStock(id, newStock) {
+  return fetch(`http://localhost:3000/products/${id}`, {
+    method: "PATCH", // Usamos PATCH para actualización parcial
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ stock: newStock }), // Solo enviamos el campo que queremos actualizar
+  });
+}
+
+export { purchaseCart, verifyStock, getProducts, getProductById };
