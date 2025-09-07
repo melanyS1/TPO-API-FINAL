@@ -12,7 +12,7 @@ function CartItem({ item, addToCart, removeFromCart }) {
           <div>
             <p>
               <Link
-                to={`/producto/${item.id}`}
+                to={`/products/${item.id}`}
                 style={{
                   textDecoration: "none",
                   color: "inherit",
