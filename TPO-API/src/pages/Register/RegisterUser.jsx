@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './RegisterUser.css';
 import { registerUser } from '../../services/api';
 
+
 const RegisterUser = () => {
   const [form, setForm] = useState({
     name: '',

@@ -4,7 +4,7 @@ Integrantes:
 - Gabriela Elizabeth Méndez Gutiérrez LU: 1134426
 - Melany Serquen; LU: 1151801
 - Edith Bibiana Mamaní LU: 1161574
--
+- Lourdes Avalos LU: 1176913
 -
 -
 -
