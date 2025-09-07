@@ -2,52 +2,11 @@ import { useState } from "react";
 import products, { getProductById } from "./data/products";
 import { useCart } from "./Context/CartContext";
 import "./index.css";
-
-function HeaderLite() {
-  const username = "lucia"; 
-
-  return (
-    <header style={{ background: "#222", color: "#fff", padding: "12px 0 0 0" }}>
-      <div className="container" style={{ display: "flex", alignItems: "center", gap: 24 }}>
-        <span style={{ fontWeight: 700, fontSize: 24 }}>TechShop</span>
-        <input
-          type="text"
-          placeholder="Buscar productos..."
-          style={{
-            marginLeft: 24,
-            flex: 1,
-            maxWidth: 400,
-            padding: "8px 12px",
-            borderRadius: 4,
-            border: "1px solid #ccc",
-            fontSize: 16
-          }}
-        />
-        <button
-          style={{
-            background: "#2196f3",
-            border: "none",
-            borderRadius: "0 4px 4px 0",
-            padding: "8px 12px",
-            marginLeft: -4,
-            cursor: "pointer"
-          }}
-        >
-          <span role="img" aria-label="buscar">🔍</span>
-        </button>
-        <div style={{ marginLeft: "auto", fontWeight: 500, fontSize: 18 }}>
-          {username}
-        </div>
-      </div>
-      <nav className="container" style={{ display: "flex", gap: 32, justifyContent: "center", marginTop: 8 }}>
-        <span style={{ color: "#fff", fontWeight: 500, cursor: "pointer" }}>Inicio</span>
-        <span style={{ color: "#fff", fontWeight: 500, cursor: "pointer" }}>Productos</span>
-        <span style={{ color: "#fff", fontWeight: 500, cursor: "pointer" }}>Ofertas</span>
-        <span style={{ color: "#fff", fontWeight: 500, cursor: "pointer" }}>Contacto</span>
-      </nav>
-    </header>
-  );
-}
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Header from "./components/Header/Header";
+import LoginUser from "./pages/Login/LoginUser";
+import RegisterUser from "./pages/Register/RegisterUser";
+import Home from "./pages/Home/Home"; 
 
 function ProductList({ onSelect }) {
   return (
@@ -174,8 +133,12 @@ function App() {
   const featured = products[0];
 
   return (
-    <>
-      <HeaderLite />
+    <Router>
+      <Header/>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<LoginUser />} />
+        <Route path="/register" element={<RegisterUser />} />
       {!selectedId ? (
         <>
           <FeaturedProduct product={featured} onSelect={setSelectedId} />
@@ -189,7 +152,8 @@ function App() {
           <ProductDetail productId={selectedId} />
         </>
       )}
-    </>
+      </Routes>
+      </Router>
   );
 }
 
