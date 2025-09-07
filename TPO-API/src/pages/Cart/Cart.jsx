@@ -4,6 +4,7 @@ import "./CartItems.css";
 import "./CartSummary.css";
 import QtyControls from "../../components/QtyControls/QtyControls";
 import { purchaseCart, verifyStock } from "../../services/product-api";
+import emptyCartImg from "../../assets/empty-cart.svg";
 
 function Cart() {
   const navigate = useNavigate();
@@ -13,12 +14,13 @@ function Cart() {
     <div className="cart-page">
       <div className="cart-items">
         {cart.items.length === 0 ? (
-          <>
+          <div className="empty-cart">
+            <img src={emptyCartImg} alt="Carrito vacío" className="empty-cart-img" />
             <p>No hay productos en el carrito</p>
-            <button onClick={() => (window.location.href = "/")}>
-              Volver al inicio
-            </button>
-          </>
+            <Link to="/" className="empty-cart-btn"> 
+              ¡Descubrí productos!
+            </Link>
+          </div>
         ) : (
           <ul>
             {cart.items.map((item) => (
