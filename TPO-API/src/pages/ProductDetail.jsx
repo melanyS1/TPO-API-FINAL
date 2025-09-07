@@ -18,7 +18,7 @@ export default function ProductDetail() {
   const max = product.stock;
 
   return (
-    <div className="container">
+    <div>
       <button
         className="container"
         style={{
