@@ -1,0 +1,84 @@
+.cart-popover-name {
+  color: #111;
+  font-weight: 500;
+  font-size: 1rem;
+  display: block;
+  margin-bottom: 2px;
+}
+.cart-popover {
+  position: fixed;
+  top: 50px;
+  right: 32px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  z-index: 1000;
+  width: 340px;
+  padding: 18px 18px 12px 18px;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cart-popover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: #888;
+}
+
+.cart-popover-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.cart-popover-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cart-popover-img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-right: 12px;
+}
+
+.cart-popover-qty {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.cart-popover-link {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 8px 18px;
+  background: #3483fa;
+  color: #fff;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.cart-popover-link:hover {
+  background: #3483fad1;
+  color: #fff;
+}
