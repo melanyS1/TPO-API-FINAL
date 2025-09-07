@@ -1,13 +1,11 @@
 import { useCart } from "../../Context/CartContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./CartItems.css";
-import "./CartSummary.css";
-import QtyControls from "../../components/QtyControls/QtyControls";
 import { purchaseCart, verifyStock } from "../../services/product-api";
-import emptyCartImg from "../../assets/empty-cart.svg";
 import CartSummary from "../../components/CartSummary/CartSummary";
 import { useEffect } from "react";
 import CartItem from "../../components/CartItem/CartItem";
+import CartEmpty from "../../components/CartEmpty/CartEmpty";
 
 
 function Cart() {
@@ -22,13 +20,7 @@ function Cart() {
     <div className="cart-page">
       <div className="cart-items">
         {cart.items.length === 0 ? (
-          <div className="empty-cart">
-            <img src={emptyCartImg} alt="Carrito vacío" className="empty-cart-img" />
-            <p>No hay productos en el carrito</p>
-            <Link to="/" className="empty-cart-btn"> 
-              ¡Descubrí productos!
-            </Link>
-          </div>
+          <CartEmpty />
         ) : (
           <ul>
             {cart.items.map((item) => (
