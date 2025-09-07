@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CartPopOver from "../CartPopOver/CartPopOver";
 import { useCart } from "../../Context/CartContext";
@@ -9,6 +9,7 @@ const Header = () => {
   const { showCartPopOver, setShowCartPopOver } = useCart();
   const { user, isAuthenticated, logout } = useUser();
   const navigate = useNavigate();
+  const [openCategories, setOpenCategories] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -46,11 +47,24 @@ const Header = () => {
           <ul>
             <li><Link to="/">Inicio</Link></li>
             <li><Link to="/products">Productos</Link></li>
-            <li><Link to="/offers">Ofertas</Link></li>
-            <li><Link to="/contact">Contacto</Link></li>
+
+            <li style={{ position: "relative", cursor: "pointer" }}>
+              <span onClick={() => setOpenCategories(!openCategories)}>
+                Categorías {openCategories ? "▴" : "▾"}
+              </span>
+              {openCategories && (
+                <ul className="submenu">
+                  <li><Link to="/categories/tecnologia">Tecnología</Link></li>
+                  <li><Link to="/categories/electrodomesticos">Electrodomésticos</Link></li>
+                  <li><Link to="/categories/hogar">Hogar</Link></li>
+                  <li><Link to="/categories/muebles">Muebles</Link></li>
+                </ul>
+              )}
+            </li>
           </ul>
         </nav>
       </header>
+
       {showCartPopOver && (
         <CartPopOver onClose={() => setShowCartPopOver(false)} />
       )}
