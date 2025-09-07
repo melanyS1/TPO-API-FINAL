@@ -1,30 +1,41 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './RegisterUser.css';
 import { registerUser } from '../../services/api';
 
 
 const RegisterUser = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '',
     email: '',
     password: ''
   });
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setError(''); // Clear error when user types
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    
+    if (!form.name || !form.email || !form.password) {
+      setError('Por favor complete todos los campos');
+      return;
+    }
+
     try {
       const response = await registerUser(form);
-      console.log('Usuario registrado:', response);
-      alert('Registro exitoso'); 
-      setForm({ name: '', email: '', password: '' }); 
+      if (response.success) {
+        alert('¡Registro exitoso! Ya puedes iniciar sesión');
+        navigate('/login');
+      }
     } catch (error) {
       console.error('Error al registrar usuario:', error);
-      alert('Error al registrar usuario');
+      setError(error.message || 'Error al registrar usuario');
     }
   };
 
@@ -38,6 +49,7 @@ const RegisterUser = () => {
 
         <form className="register-form" onSubmit={handleSubmit}>
           <h2>Registro de Usuario</h2>
+          {error && <div className="error-message">{error}</div>}
           <input
             type="text"
             name="name"
@@ -61,6 +73,7 @@ const RegisterUser = () => {
             value={form.password}
             onChange={handleChange}
             required
+            minLength="3"
           />
           <button type="submit">Registrarse</button>
 
