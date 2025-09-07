@@ -1,7 +1,9 @@
-import products from "../data/products";
+import useGetProducts from "../hooks/useGetProducts";
 import { Link } from "react-router-dom";
 
 export default function ProductRow() {
+  const products = useGetProducts();
+
   return (
     <div style={{ marginTop: 48 }}>
       <h2 style={{ fontSize: 22, marginBottom: 24 }}>Vistos frecuentemente por los clientes</h2>

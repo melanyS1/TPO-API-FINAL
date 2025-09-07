@@ -33,4 +33,17 @@ function verifyStock(cart) {
     return true; // Stock suficiente
 }
 
-export { purchaseCart, verifyStock};
+function getProducts() {
+  return fetch("http://localhost:3000/products")
+    .then((response) => response.json())
+    .then((data) => {
+      // Aquí puedes manejar los datos de los productos
+      console.log("Productos obtenidos:", data);
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error al obtener productos:", error);
+    });
+}
+
+export { purchaseCart, verifyStock, getProducts};
