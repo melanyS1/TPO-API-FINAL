@@ -25,7 +25,8 @@ export default function ProductRow() {
             <div style={{ color: "#b12704", fontWeight: 700, fontSize: 18 }}>${prod.price.toFixed(2)}</div>
             <div style={{ color: "#555", fontSize: 14, marginBottom: 8 }}>{prod.description.slice(0, 50)}...</div>
             <Link
-              to={`/producto/${prod.id}`}
+              to={`../${prod.id}`}
+              relative="path"
               style={{
                 display: "inline-block",
                 background: "#ffd814",
