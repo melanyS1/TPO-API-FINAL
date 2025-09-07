@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useReducer } from "react";
+import { createContext, useContext, useMemo, useReducer, useRef, useState } from "react";
 
 const CartContext = createContext();
 const initialState = { items: [] };
@@ -40,15 +40,27 @@ export function CartProvider({ children }) {
     [state.items]
   );
 
-  // Funciones para modificar el carrito
-  const addToCart = (product, qty) =>
+  // Estado y timeout para el pop over
+  const [showCartPopOver, setShowCartPopOver] = useState(false);
+  const popOverTimeout = useRef(null);
+
+  // Función para mostrar el pop over al agregar
+  const addToCart = (product, qty) => {
     dispatch({ type: "ADD", payload: { ...product, qty } });
+    setShowCartPopOver(true);
+    if (popOverTimeout.current) {
+      clearTimeout(popOverTimeout.current);
+    }
+    popOverTimeout.current = setTimeout(() => {
+      setShowCartPopOver(false);
+    }, 10000);
+  };
+
   const removeFromCart = (id) => dispatch({ type: "REMOVE", payload: { id } });
   const clearCart = () => dispatch({ type: "CLEAR" });
-  
-  
+
   return (
-    <CartContext.Provider value={{ cart: state, totalItems, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cart: state, totalItems, addToCart, removeFromCart, clearCart, showCartPopOver, setShowCartPopOver }}>
       {children}
     </CartContext.Provider>
   );
