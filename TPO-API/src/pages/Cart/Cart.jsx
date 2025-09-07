@@ -6,6 +6,7 @@ import QtyControls from "../../components/QtyControls/QtyControls";
 import { purchaseCart, verifyStock } from "../../services/product-api";
 import emptyCartImg from "../../assets/empty-cart.svg";
 import { useEffect } from "react";
+import CartItem from "../../components/CartItem/CartItem";
 
 
 function Cart() {
@@ -30,51 +31,12 @@ function Cart() {
         ) : (
           <ul>
             {cart.items.map((item) => (
-              <li key={item.id}>
-                <div className="item-title">
-                  <div className="listed-item-img">
-                    <img src={item.image} alt={item.name} />
-                  </div>
-                  <div>
-                    <p>
-                      <Link
-                        to={`/producto/${item.id}`}
-                        style={{
-                          textDecoration: "none",
-                          color: "inherit",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {item.name}
-                      </Link>
-                    </p>
-                    <button
-                      className="delete-btn"
-                      onClick={() => removeFromCart(item.id)}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                </div>
-
-                <div className="cart-item-qty">
-                  <div className="info-row">
-                    <QtyControls
-                      qty={item.qty}
-                      maxQty={item.stock}
-                      onIncrease={() => {
-                        addToCart(item, 1);
-                      }}
-                      onDecrease={() => {
-                        addToCart(item, -1);
-                      }}
-                    />
-                    <div className="item-subtotal">
-                      <p>${item.price}</p>
-                    </div>
-                  </div>
-                </div>
-              </li>
+              <CartItem
+                key={item.id}
+                item={item}
+                addToCart={addToCart}
+                removeFromCart={removeFromCart}
+              />
             ))}
           </ul>
         )}
