@@ -7,7 +7,7 @@ import ProductRow from "./ProductRow";
 export default function ProductDetail() {
   const { id } = useParams();
   const product = useMemo(() => getProductById(id), [id]);
-  const { addToCart } = useCart();
+  const { addToCart, setShowCartPopOver } = useCart();
   const [qty, setQty] = useState(1);
 
   if (!product) return <div className="container">Producto no encontrado.</div>;
@@ -41,7 +41,7 @@ export default function ProductDetail() {
           </label>
           <button
             disabled={!inStock || qty < 1 || qty > max}
-            onClick={() => { addToCart(product, qty); }}
+            onClick={() => { addToCart(product, qty); setShowCartPopOver(true);}}
           >
             Agregar al carrito 🛒
           </button>

@@ -47,7 +47,7 @@ export function CartProvider({ children }) {
   // Función para mostrar el pop over al agregar
   const addToCart = (product, qty) => {
     dispatch({ type: "ADD", payload: { ...product, qty } });
-    setShowCartPopOver(true);
+
     if (popOverTimeout.current) {
       clearTimeout(popOverTimeout.current);
     }

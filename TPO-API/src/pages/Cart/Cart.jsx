@@ -5,10 +5,16 @@ import "./CartSummary.css";
 import QtyControls from "../../components/QtyControls/QtyControls";
 import { purchaseCart, verifyStock } from "../../services/product-api";
 import emptyCartImg from "../../assets/empty-cart.svg";
+import { useEffect } from "react";
+
 
 function Cart() {
   const navigate = useNavigate();
-  const { cart, addToCart, removeFromCart, totalItems, clearCart } = useCart(); //userCartContext
+  const { cart, addToCart, removeFromCart, totalItems, clearCart, setShowCartPopOver } = useCart();
+
+  useEffect(() => {
+    setShowCartPopOver(false);
+  }, [setShowCartPopOver]);
 
   return (
     <div className="cart-page">
