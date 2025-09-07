@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
 import LoginUser from "./pages/Login/LoginUser";
 import RegisterUser from "./pages/Register/RegisterUser";
-import Home from "./pages/Home/Home"; 
+import Home from "./pages/Home/Home";
 
 function ProductList({ onSelect }) {
   return (
@@ -134,26 +134,42 @@ function App() {
 
   return (
     <Router>
-      <Header/>
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginUser />} />
         <Route path="/register" element={<RegisterUser />} />
-      {!selectedId ? (
-        <>
-          <FeaturedProduct product={featured} onSelect={setSelectedId} />
-          <ProductList onSelect={setSelectedId} />
-        </>
-      ) : (
-        <>
-          <button className="container" style={{ margin: "24px 0", background: "#eee", border: "none", padding: "8px 16px", borderRadius: 6, cursor: "pointer" }} onClick={() => setSelectedId(null)}>
-            ← Volver a productos
-          </button>
-          <ProductDetail productId={selectedId} />
-        </>
-      )}
+        <Route
+          path="/products"
+          element={
+            !selectedId ? (
+              <>
+                <FeaturedProduct product={featured} onSelect={setSelectedId} />
+                <ProductList onSelect={setSelectedId} />
+              </>
+            ) : (
+              <>
+                <button
+                  className="container"
+                  style={{
+                    margin: "24px 0",
+                    background: "#eee",
+                    border: "none",
+                    padding: "8px 16px",
+                    borderRadius: 6,
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setSelectedId(null)}
+                >
+                  ← Volver a productos
+                </button>
+                <ProductDetail productId={selectedId} />
+              </>
+            )
+          }
+        />
       </Routes>
-      </Router>
+    </Router>
   );
 }
 
