@@ -1,6 +1,13 @@
+.cart-popover-name {
+  color: #111;
+  font-weight: 500;
+  font-size: 1rem;
+  display: block;
+  margin-bottom: 2px;
+}
 .cart-popover {
   position: fixed;
-  top: 80px;
+  top: 50px;
   right: 32px;
   background: #fff;
   border: 1px solid #ddd;
@@ -64,7 +71,7 @@
   display: inline-block;
   margin-top: 8px;
   padding: 8px 18px;
-  background: #2e7d32;
+  background: #3483fa;
   color: #fff;
   border-radius: 5px;
   text-decoration: none;
@@ -72,5 +79,6 @@
   transition: background 0.2s;
 }
 .cart-popover-link:hover {
-  background: #388e3c;
+  background: #3483fad1;
+  color: #fff;
 }

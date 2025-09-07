@@ -20,8 +20,8 @@ function CartPopOver({ onClose }) {
           <li key={item.id} className="cart-popover-item">
             <img src={item.image} alt={item.name} className="cart-popover-img" />
             <div>
-              <Link to={`/product/${item.id}`}>{item.name}</Link>
-              <div className="cart-popover-qty">Cantidad: {item.qty}</div>
+              <span className="cart-popover-name">{item.name}</span>
+              <div className="cart-popover-qty">Cantidad agregada: {item.qty}</div>
             </div>
           </li>
         ))}
