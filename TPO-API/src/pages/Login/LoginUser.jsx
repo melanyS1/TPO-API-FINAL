@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./LoginUser.css";
-import { loginUser } from "../../services/api.js";
+import { useUser } from "../../Context/UserContext";
 
 const LoginUser = () => {
   const [form, setForm] = useState({
     email: "",
     password: ""
   });
+  const [error, setError] = useState("");
+  const { login } = useUser();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,14 +18,22 @@ const LoginUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(""); // Clear any previous errors
     try {
-      const response = await loginUser(form);
-      console.log("Login exitoso:", response);
-      alert("Bienvenido " + response.user.email);
-      setForm({ email: "", password: "" });
+      const result = await login(form.email, form.password);
+      
+      if (result.success) {
+        setForm({ email: "", password: "" });
+        navigate("/");
+      } else {
+        setError(result.error);
+        alert("Credenciales incorrectas"); // Keep the error alert
+        console.error("Error en login:", result.error);
+      }
     } catch (error) {
+      setError("Error al intentar iniciar sesión");
+      alert("Credenciales incorrectas"); // Keep the error alert
       console.error("Error en login:", error);
-      alert("Credenciales incorrectas");
     }
   };
 
@@ -36,6 +47,7 @@ const LoginUser = () => {
 
         <form className="login-form" onSubmit={handleSubmit}>
           <h2>Iniciar Sesión</h2>
+          {error && <div className="error-message" style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
           <input
             type="email"
             name="email"
