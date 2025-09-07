@@ -1,11 +1,19 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CartPopOver from "../CartPopOver/CartPopOver";
 import { useCart } from "../../Context/CartContext";
+import { useUser } from "../../Context/UserContext";
 import "./Header.css";
 
 const Header = () => {
   const { showCartPopOver, setShowCartPopOver } = useCart();
+  const { user, isAuthenticated, logout } = useUser();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
   return (
     <>
       <header className="header">
@@ -18,9 +26,18 @@ const Header = () => {
           </div>
 
           <div className="actions">
-            <Link to="/login" className="user-link">Iniciar Sesión</Link>
-            <span style={{ margin: "0 5px" }}>/</span>
-            <Link to="/register" className="user-link">Registrarme</Link>
+            {isAuthenticated ? (
+              <>
+                <span className="user-name">Hola, {user.username || user.email}</span>
+                <button onClick={handleLogout} className="logout-btn">Cerrar sesión</button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="user-link">Iniciar Sesión</Link>
+                <span style={{ margin: "0 5px" }}>/</span>
+                <Link to="/register" className="user-link">Registrarme</Link>
+              </>
+            )}
             <Link to="/cart" className="cart-icon">🛒</Link>
           </div>
         </div>
