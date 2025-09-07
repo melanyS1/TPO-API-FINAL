@@ -24,6 +24,10 @@ function reducer(state, action) {
       const items = state.items.filter((item) => item.id !== id);
       return { ...state, items };
     }
+
+    case "CLEAR":
+      return initialState;
+
     default:
       return state;
   }
@@ -40,9 +44,11 @@ export function CartProvider({ children }) {
   const addToCart = (product, qty) =>
     dispatch({ type: "ADD", payload: { ...product, qty } });
   const removeFromCart = (id) => dispatch({ type: "REMOVE", payload: { id } });
+  const clearCart = () => dispatch({ type: "CLEAR" });
+  
   
   return (
-    <CartContext.Provider value={{ cart: state, totalItems, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cart: state, totalItems, addToCart, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );
