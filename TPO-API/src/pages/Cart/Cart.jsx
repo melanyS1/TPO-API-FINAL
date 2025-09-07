@@ -2,29 +2,16 @@ import { useCart } from "../../Context/CartContext";
 import { Link, useNavigate } from "react-router-dom";
 import "./CartItems.css";
 import "./CartSummary.css";
-import products from "../../data/products";
 import QtyControls from "../../components/QtyControls/QtyControls";
 import { purchaseCart, verifyStock } from "../../services/product-api";
 
 function Cart() {
   const navigate = useNavigate();
   const { cart, addToCart, removeFromCart, totalItems, clearCart } = useCart(); //userCartContext
-  console.log(cart);
-  const addAllToCart = () => {
-    products.forEach((product) => {
-      // Si el producto ya está en el carrito, no lo añade de nuevo
-      if (!cart.items.some((item) => item.id === product.id)) {
-        addToCart(product, 1);
-      }
-    });
-  };
 
   return (
     <div className="cart-page">
       <div className="cart-items">
-        <button onClick={addAllToCart}>
-          Agregar todos los productos al carrito
-        </button>
         {cart.items.length === 0 ? (
           <>
             <p>No hay productos en el carrito</p>
