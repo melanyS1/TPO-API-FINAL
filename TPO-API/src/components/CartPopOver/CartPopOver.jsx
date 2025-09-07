@@ -1,5 +1,3 @@
-
-import React from "react";
 import "./CartPopOver.css";
 import { useCart } from "../../Context/CartContext";
 import { Link } from "react-router-dom";
