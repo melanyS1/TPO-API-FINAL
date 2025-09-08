@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "npx json-server db.json --port 3001 & vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
