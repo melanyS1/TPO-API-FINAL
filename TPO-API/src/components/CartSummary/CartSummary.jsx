@@ -26,7 +26,11 @@ function CartSummary({ totalItems, cart, onCheckout }) {
         <p>${total.toFixed(2)}</p>
       </div>
       <hr />
-      <button className="checkout-btn" onClick={onCheckout}>
+      <button
+        className="checkout-btn"
+        onClick={onCheckout}
+        disabled={!hasItems}
+      >
         Comprar
       </button>
     </div>
