@@ -9,8 +9,7 @@ import { UserProvider } from "./Context/UserContext";
 import ProductDetail from "./pages/ProductDetail";
 import ThankYouPage from "./pages/ThankYouPage/ThankYouPage";
 import Products from "./pages/Products/Products";
-
-
+import MisProductos from "./pages/MisProductos/misProductos";
 
 function App() {
   return (
@@ -28,6 +27,7 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/thank-you" element={<ThankYouPage />} />
+              <Route path="/mis-productos" element={<MisProductos />} />
             </Routes>
           </main>
         </Router>

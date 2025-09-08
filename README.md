@@ -7,9 +7,12 @@ Integrantes:
 - Lourdes Avalos LU: 1176913
 - Lucia Rizzo LU: 1176050
 - Roxana Rodríguez LU: 1164643
--
+- José Leandro Rivero LU: 1133855
 
-
+# Correr el proyecto: 
+npm install (si no lo tenés instalado)
+npm run api
+npm run dev
 
 # Organización proyecto
 Módulos plataforma: 

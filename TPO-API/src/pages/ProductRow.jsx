@@ -31,8 +31,8 @@ export default function ProductRow() {
               relative="path"
               style={{
                 display: "inline-block",
-                background: "#ffd814",
-                color: "#222",
+                background: "#1f87f6",
+                color: "#ffffffff",
                 fontWeight: 700,
                 padding: "8px 16px",
                 border: 0,

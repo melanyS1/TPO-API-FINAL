@@ -11,68 +11,63 @@
       "username": "maria456",
       "email": "maria@example.com",
       "password": "123"
+    },
+    {
+      "id": "1757369233101",
+      "username": "Gabriela",
+      "email": "gaby@ejemplo.com",
+      "password": "123"
     }
   ],
   "products": [
     {
-      "id": "1",
-      "name": "MacBook Pro M2",
-      "price": 1299.99,
-      "stock": 5,
-      "description": "Latest MacBook Pro with M2 chip, 13-inch display and 8GB RAM",
-      "image": "https://example.com/macbook.jpg",
+      "name": "Mini Proyector Elephas",
+      "price": 50.45,
+      "stock": 4,
+      "description": "2020 Mini Proyector de Película, 5000 LUX Full HD 1080P, compatible con USB/HDMI/VGA/Computadora/Portátil/iPhone/TV Stick/Tarjeta TF.",
+      "image": "https://m.media-amazon.com/images/I/51CnRBSVnrL._AC_SL1500_.jpg",
       "categoryId": "1",
-      "sellerId": "1"
+      "id": "1"
     },
     {
       "id": "2",
-      "name": "iPhone 14 Pro",
-      "price": 999.99,
-      "stock": 10,
-      "description": "Latest iPhone with A16 Bionic chip and ProMotion display",
-      "image": "https://example.com/iphone.jpg",
-      "categoryId": "2",
-      "sellerId": "2"
+      "name": "Proyector portátil YG300",
+      "price": 48.42,
+      "stock": 12,
+      "description": "Mini proyector de 7500 lúmenes para películas al aire libre, hasta 170 pulgadas.",
+      "image": "https://sistema.langtecnologia.com.ar/img/qloud/2572/8140_1.jpg",
+      "categoryId": "1",
+      "sellerId": 2
     },
     {
       "id": "3",
-      "name": "Sony WH-1000XM4",
-      "price": 349.99,
-      "stock": 8,
-      "description": "Premium wireless noise-cancelling headphones",
-      "image": "https://example.com/headphones.jpg",
-      "categoryId": "3",
-      "sellerId": "1"
+      "name": "Proyector WiFi Bluetooth 5.1",
+      "price": 65.99,
+      "stock": 5,
+      "description": "Proyector portátil con soporte 4K, altavoz base de sonido, compatible con HDMI y USB.",
+      "image": "https://m.media-amazon.com/images/I/51AQ01HrQPL._AC_SL1200_.jpg",
+      "categoryId": "2",
+      "sellerId": 3
     },
     {
       "id": "4",
-      "name": "iPad Air",
-      "price": 599.99,
-      "stock": 6,
-      "description": "Powerful tablet with M1 chip and 10.9-inch Liquid Retina display",
-      "image": "https://example.com/ipad.jpg",
-      "categoryId": "1",
-      "sellerId": "2"
+      "name": "Proyector Cine para Exteriores",
+      "price": 139.99,
+      "stock": 8,
+      "description": "Proyector de cine portátil nativo 1080P, 15000 lúmenes, compatible con TV Stick.",
+      "image": "https://www.el-pentagono.com.ar/mods/html/fil/Model/Product/1106/650dbf706e72c-proyector.png.webp",
+      "categoryId": "2",
+      "sellerId": 2
     },
     {
       "id": "5",
-      "name": "Samsung Galaxy S23 Ultra",
-      "price": 1199.99,
-      "stock": 7,
-      "description": "Premium Android smartphone with S Pen and 200MP camera",
-      "image": "https://example.com/samsung.jpg",
-      "categoryId": "2",
-      "sellerId": "1"
-    },
-    {
-      "id": "6",
-      "name": "Dell XPS 15",
-      "price": 1499.99,
+      "name": "Proyector ViewSonic PA503S",
+      "price": 299.99,
       "stock": 4,
-      "description": "Premium laptop with 4K display and RTX 3050 Ti",
-      "image": "https://example.com/dell.jpg",
-      "categoryId": "1",
-      "sellerId": "2"
+      "description": "Proyector ViewSonic PA503S 3600 lúmenes HDMI VGA.",
+      "image": "https://www.iggual.com//images/product/large/IGG319208,grid_Mesadetrabajo1_17212998717_1.webp",
+      "categoryId": "3",
+      "sellerId": 1
     }
   ],
   "categories": [
