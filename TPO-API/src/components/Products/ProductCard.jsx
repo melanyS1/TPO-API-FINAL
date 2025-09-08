@@ -2,9 +2,11 @@
 import React from 'react';
 import './ProductCard.css';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../Context/CartContext';
 
 const ProductCard = ({ product }) => {
     const navigate = useNavigate();
+    const { addToCart, setShowCartPopOver } = useCart();
     return (
         <div
             className="product-card"
@@ -19,6 +21,8 @@ const ProductCard = ({ product }) => {
                 <button className="add-to-cart"
                     onClick={e => {
                         e.stopPropagation();
+                        addToCart(product, 1);
+                        setShowCartPopOver(true);
                     }}
                 >Add to Cart</button>
             </div>
