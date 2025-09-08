@@ -8,6 +8,8 @@ import { CartProvider } from "./Context/CartContext";
 import { UserProvider } from "./Context/UserContext";
 import ProductDetail from "./pages/ProductDetail";
 import ThankYouPage from "./pages/ThankYouPage/ThankYouPage";
+import ejemplo from "./pages/MisProductos/ejemplo"; 
+
 
 
 function App() {
@@ -24,6 +26,7 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/thank-you" element={<ThankYouPage />} />
+              <Route path="/mis-productos" element={<ejemplo />} />
             </Routes>
           </main>
         </Router>
