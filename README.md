@@ -10,8 +10,8 @@ Integrantes:
 - José Leandro Rivero LU: 1133855
 
 # Correr el proyecto: 
-npm install (si no lo tenés instalado)
-npm run api
+npm install (si no lo tenés instalado)  
+npm run api  
 npm run dev
 
 # Organización proyecto
