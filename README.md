@@ -5,7 +5,7 @@ Integrantes:
 - Melany Serquen; LU: 1151801
 - Edith Bibiana Mamaní LU: 1161574
 - Lourdes Avalos LU: 1176913
--
+- Lucia Rizzo LU: 1176050
 -
 -
 
