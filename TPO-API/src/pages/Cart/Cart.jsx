@@ -3,16 +3,23 @@ import { useNavigate } from "react-router-dom";
 import "./CartItems.css";
 import { purchaseCart, verifyStock } from "../../services/product-api";
 import CartSummary from "../../components/CartSummary/CartSummary";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CartItem from "../../components/CartItem/CartItem";
 import CartEmpty from "../../components/CartEmpty/CartEmpty";
-import { useUser } from "../../Context/UserContext";  
-
+import { useUser } from "../../Context/UserContext";
 
 function Cart() {
   const navigate = useNavigate();
   const { isAuthenticated } = useUser();
-  const { cart, addToCart, removeFromCart, totalItems, clearCart, setShowCartPopOver } = useCart();
+  const {
+    cart,
+    addToCart,
+    removeFromCart,
+    totalItems,
+    clearCart,
+    setShowCartPopOver,
+  } = useCart();
+  const [showLoginMsg, setShowLoginMsg] = useState(false);
 
   useEffect(() => {
     setShowCartPopOver(false);
@@ -37,27 +44,35 @@ function Cart() {
         )}
       </div>
 
-      <CartSummary
-        totalItems={totalItems}
-        cart={cart}
-        onCheckout={() => {
-          if (!isAuthenticated) {
-            alert("Por favor inicie sesión para continuar con la compra");
-            navigate("/login");
-            return;
-          }
-          verifyStock(cart).then((isStockSufficient) => {
-            if (!isStockSufficient) {
-              alert("Stock insuficiente");
+      <div className="cart-summary-section">
+        <CartSummary
+          totalItems={totalItems}
+          cart={cart}
+          onCheckout={() => {
+            if (!isAuthenticated) {
+              setShowLoginMsg(true);
               return;
-            } else {
-              purchaseCart(cart);
-              navigate("/thank-you");
-              clearCart();
             }
-          });
-        }}
-      />
+            verifyStock(cart).then((isStockSufficient) => {
+              if (!isStockSufficient) {
+                alert("Stock insuficiente");
+                return;
+              } else {
+                navigate("/thank-you");
+                purchaseCart(cart);
+                clearCart();
+              }
+            });
+          }}
+        />
+        <div className="cart-login-message">
+          <p>
+            {showLoginMsg
+              ? "Debes iniciar sesión para continuar con la compra."
+              : ""}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

@@ -15,3 +15,25 @@
     margin-top: 0; /* Elimina el margen por defecto de la lista */
 }
 
+.cart-summary-section {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.cart-login-message {
+    margin-top: 12px;
+    max-width: 80%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-login-message p {
+    color: crimson;
+    text-align: center;
+    font-weight: 500;
+}
