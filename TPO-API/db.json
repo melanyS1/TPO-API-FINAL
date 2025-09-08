@@ -11,18 +11,23 @@
       "username": "maria456",
       "email": "maria@example.com",
       "password": "123"
+    },
+    {
+      "id": "1757369233101",
+      "username": "Gabriela",
+      "email": "gaby@ejemplo.com",
+      "password": "123"
     }
   ],
   "products": [
     {
-      "id": "1",
       "name": "Mini Proyector Elephas",
-      "price": 41.96,
-      "stock": 5,
+      "price": 50.45,
+      "stock": 4,
       "description": "2020 Mini Proyector de Película, 5000 LUX Full HD 1080P, compatible con USB/HDMI/VGA/Computadora/Portátil/iPhone/TV Stick/Tarjeta TF.",
       "image": "https://m.media-amazon.com/images/I/51CnRBSVnrL._AC_SL1500_.jpg",
       "categoryId": "1",
-      "sellerId": 1
+      "id": "1"
     },
     {
       "id": "2",

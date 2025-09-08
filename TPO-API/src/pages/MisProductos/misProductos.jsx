@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../Context/UserContext';
 import './MisProductos.css';
-import useGetProductsBySeller from '../../hooks/useGetProductsBySeller';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
@@ -154,8 +153,6 @@ const MisProductos = () => {
     }
   };
 
-  const productos = useGetProductsBySeller(1);
-
   if (!user) return null;
 
   return (
@@ -172,8 +169,7 @@ const MisProductos = () => {
             <input name="price" placeholder="Precio" value={form.price} onChange={handleChange} />
             <input name="stock" placeholder="Stock" value={form.stock} onChange={handleChange} />
             <input name="categoryId" placeholder="Category ID" value={form.categoryId} onChange={handleChange} />
-            {/* reemplazo del input de imagen por área de upload */
-        /*
+            {/* Area de subida de imágenes */}
             <div className="upload-area" onDrop={onDrop} onDragOver={onDragOver}>
               {form.image ? (
                 <img className="upload-preview" src={form.image} alt="preview" />
@@ -201,8 +197,7 @@ const MisProductos = () => {
                     <input name="price" value={form.price} onChange={handleChange} />
                     <input name="stock" value={form.stock} onChange={handleChange} />
                     <input name="categoryId" value={form.categoryId} onChange={handleChange} />
-                    {/* reemplazo del input de imagen por área de upload en modo edición */
-                    /*
+                    {/* reemplazo del input de imagen por área de upload en modo edición */}
                     <div className="upload-area" onDrop={onDrop} onDragOver={onDragOver}>
                       {form.image ? (
                         <img className="upload-preview" src={form.image} alt="preview" />
@@ -238,16 +233,6 @@ const MisProductos = () => {
             ))}
           </div>
         )}
-        <div>
-          <h2>Productos del vendedor 1</h2>
-          <ul>
-            {productos.map((producto) => (
-              <li key={producto.id}>
-                {producto.name} - ${producto.price}
-              </li>
-            ))}
-          </ul>
-        </div>
       </div>
     </div>
   );
