@@ -1,10 +1,12 @@
 import React from 'react';
 import './FeaturedProducts.css';
 import useGetProducts from '../../hooks/useGetProducts';
+import { useNavigate } from 'react-router-dom';
 
 const FeaturedProducts = () => {
   const products = useGetProducts();
   const featuredProducts = products && products.length > 0 ? products.slice(0, 4) : [];
+  const navigate = useNavigate();
 
   return (
     <section className="featured-products">
@@ -20,7 +22,7 @@ const FeaturedProducts = () => {
                 <span className="price">${product.price}</span>
                 <button
                   className="featured-button"
-                  onClick={() => window.open(`/products/${product.id}`, '_blank')}
+                  onClick={() => navigate(`/products/${product.id}`)}
                 >
                   Ver Detalles
                 </button>

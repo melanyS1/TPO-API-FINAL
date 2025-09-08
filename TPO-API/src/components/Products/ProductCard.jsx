@@ -9,7 +9,7 @@ const ProductCard = ({ product }) => {
         <div
             className="product-card"
             style={{ cursor: 'pointer' }}
-            onClick={() => window.open(`/products/${product.id}`, '_blank')}
+            onClick={() => navigate(`/products/${product.id}`)}
         >
             <img src={product.image} alt={product.name} className="product-image" />
             <div className="product-info">
