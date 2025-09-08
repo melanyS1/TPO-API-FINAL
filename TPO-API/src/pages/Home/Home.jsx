@@ -1,10 +1,15 @@
-import React from "react";
+import React from 'react';
+import Banner from '../../components/Banner/Banner';
+import PaymentInfo from '../../components/PaymentInfo/PaymentInfo';
+import FeaturedProducts from '../../components/FeaturedProducts/FeaturedProducts';
+import './Home.css';
 
 const Home = () => {
   return (
-    <div>
-      <section style={{ minHeight: "80vh", padding: "20px" }}>
-      </section>
+    <div className="home">
+      <Banner />
+      <PaymentInfo />
+      <FeaturedProducts />
     </div>
   );
 };
