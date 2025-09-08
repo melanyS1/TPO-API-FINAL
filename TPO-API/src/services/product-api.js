@@ -35,7 +35,7 @@ function verifyStock(cart) {
 }
 
 function getProducts() {
-  return fetch("http://localhost:3000/products")
+  return fetch("http://localhost:3001/products")
     .then((response) => response.json())
     .then((data) => {
       // Aquí puedes manejar los datos de los productos
@@ -48,7 +48,7 @@ function getProducts() {
 }
 
 function getProductById(id) {
-  return fetch(`http://localhost:3000/products/${id}`)
+  return fetch(`http://localhost:3001/products/${id}`)
     .then((response) => response.json())
     .then((data) => {
       // Aquí puedes manejar los datos de los productos
@@ -61,7 +61,7 @@ function getProductById(id) {
 }
 
 function partialUpdateProductStock(id, newStock) {
-  return fetch(`http://localhost:3000/products/${id}`, {
+  return fetch(`http://localhost:3001/products/${id}`, {
     method: "PATCH", // Usamos PATCH para actualización parcial
     headers: {
       "Content-Type": "application/json",
