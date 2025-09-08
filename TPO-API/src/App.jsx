@@ -8,6 +8,8 @@ import { CartProvider } from "./Context/CartContext";
 import { UserProvider } from "./Context/UserContext";
 import ProductDetail from "./pages/ProductDetail";
 import ThankYouPage from "./pages/ThankYouPage/ThankYouPage";
+import Products from "./pages/Products/Products";
+
 
 
 function App() {
@@ -18,9 +20,11 @@ function App() {
           <Header />
           <main className="container">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Home />} />  
+              <Route path="/home" element={<Home />} />
               <Route path="/login" element={<LoginUser />} />
               <Route path="/register" element={<RegisterUser />} />
+              <Route path="/products" element={<Products />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/thank-you" element={<ThankYouPage />} />
