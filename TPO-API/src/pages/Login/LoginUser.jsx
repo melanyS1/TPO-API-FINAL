@@ -27,12 +27,11 @@ const LoginUser = () => {
         navigate("/");
       } else {
         setError(result.error);
-        alert("Credenciales incorrectas"); // Keep the error alert
         console.error("Error en login:", result.error);
       }
     } catch (error) {
-      setError("Error al intentar iniciar sesión");
-      alert("Credenciales incorrectas"); // Keep the error alert
+      const errorMessage = error.message || "Error al intentar iniciar sesión";
+      setError(errorMessage);
       console.error("Error en login:", error);
     }
   };
