@@ -5,7 +5,7 @@ function useGetProductsBySeller(sellerId) {
     const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    useGetProductsBySeller(sellerId).then((data) => {
+    getProductsbySeller(sellerId).then((data) => {
       setProduct(data);
     });
   }, [sellerId]);
