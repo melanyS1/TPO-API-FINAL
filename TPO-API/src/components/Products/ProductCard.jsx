@@ -20,7 +20,7 @@ const ProductCard = ({ product }) => {
                     onClick={e => {
                         e.stopPropagation();
                     }}
-                >Add to Cart</button>
+                >Ver Detalle</button>
             </div>
         </div>
     );
