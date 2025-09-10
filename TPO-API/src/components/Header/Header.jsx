@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import CartPopOver from "../CartPopOver/CartPopOver";
 import { useCart } from "../../Context/CartContext";
 import { useUser } from "../../Context/UserContext";
+import {useSearchProducts} from "../../hooks/useSearchProducts";
 import "./Header.css";
 
 const Header = () => {
@@ -11,7 +12,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [openCategories, setOpenCategories] = useState(false);
   const [categories, setCategories] = useState([]);
-
+  const  { query, productsFound,handleQueryChange } = useSearchProducts();
   useEffect(() => {
     fetch('http://localhost:3001/categories')
       .then(response => response.json())
@@ -45,9 +46,14 @@ const Header = () => {
           <div className="logo">TechShop</div>
 
           <div className="search-bar">
-            <input type="text" placeholder="Buscar productos..." />
+            <input type="text" placeholder="Buscar productos..." value={query} onChange={(e) => handleQueryChange(e.target.value)} />
             <button>🔍</button>
           </div>
+          <ul>
+            {productsFound.map(product => (
+              <li key={product.id}>{product.name}</li>
+            ))}
+          </ul>
 
           <div className="actions">
             {isAuthenticated ? (
