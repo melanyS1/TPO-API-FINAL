@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { BiSearch } from "react-icons/bi";
 import CartPopOver from "../CartPopOver/CartPopOver";
+import SearchResults from "../SearchResults/SearchResults";
 import { useCart } from "../../Context/CartContext";
 import { useUser } from "../../Context/UserContext";
+import useGetProducts from "../../hooks/useGetProducts";
 import "./Header.css";
 
 const Header = () => {
@@ -11,6 +14,10 @@ const Header = () => {
   const navigate = useNavigate();
   const [openCategories, setOpenCategories] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showResults, setShowResults] = useState(false);
+  const searchRef = useRef(null);
+  const products = useGetProducts(searchTerm);
 
   useEffect(() => {
     fetch('http://localhost:3001/categories')
@@ -27,26 +34,61 @@ const Header = () => {
   // Referencia para el menú desplegable
   const menuRef = useRef(null);
 
-  // Cerrar el menú cuando se hace click fuera
+  // Cerrar el menú y resultados cuando se hace click fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setOpenCategories(false);
+      }
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowResults(false);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+      setSearchTerm("");
+    }
+  };
   return (
     <>
       <header className="header">
         <div className="header-container">
-          <div className="logo">TechShop</div>
+          <Link to="/" className="logo">TechShop</Link>
 
-          <div className="search-bar">
-            <input type="text" placeholder="Buscar productos..." />
-            <button>🔍</button>
+          <div className="search-container" ref={searchRef}>
+            <form className="search-bar" onSubmit={handleSearch}>
+              <input 
+                type="text" 
+                placeholder="Buscar productos..." 
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setShowResults(true);
+                }}
+                onFocus={() => setShowResults(true)}
+              />
+              <button type="submit">
+                <BiSearch size={20} />
+              </button>
+            </form>
+            <SearchResults 
+              results={products.filter(p => 
+                p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                p.description.toLowerCase().includes(searchTerm.toLowerCase())
+              )}
+              visible={showResults && searchTerm.length > 0}
+              onResultClick={() => {
+                setShowResults(false);
+                setSearchTerm('');
+              }}
+            />
           </div>
 
           <div className="actions">

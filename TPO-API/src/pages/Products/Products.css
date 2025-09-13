@@ -1,0 +1,22 @@
+.products-page {
+    padding: 1rem;
+}
+
+.products-page h1 {
+    color: #2c3e50;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+    position: relative;
+}
+
+.products-page h1::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100px;
+    height: 2px;
+    background-color: #3483fa;
+}
