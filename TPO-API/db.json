@@ -60,16 +60,6 @@
       "sellerId": 2
     },
     {
-      "id": "5",
-      "name": "Proyector ViewSonic PA503S",
-      "price": 299.99,
-      "stock": 4,
-      "description": "Proyector ViewSonic PA503S 3600 lúmenes HDMI VGA.",
-      "image": "https://www.iggual.com//images/product/large/IGG319208,grid_Mesadetrabajo1_17212998717_1.webp",
-      "categoryId": "3",
-      "sellerId": 1
-    },
-    {
       "id": "6",
       "name": "Asus ROG Zephyrus G14",
       "price": 1499.99,

@@ -90,11 +90,6 @@ const Header = () => {
               }}
             />
           </div>
-          <ul>
-            {productsFound.map(product => (
-              <li key={product.id}>{product.name}</li>
-            ))}
-          </ul>
 
           <div className="actions">
             {isAuthenticated ? (
