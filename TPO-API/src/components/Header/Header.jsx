@@ -18,7 +18,7 @@ const Header = () => {
   const [showResults, setShowResults] = useState(false);
   const searchRef = useRef(null);
   const products = useGetProducts(searchTerm);
-
+ 
   useEffect(() => {
     fetch('http://localhost:3001/categories')
       .then(response => response.json())
@@ -92,11 +92,12 @@ const Header = () => {
           </div>
 
           <div className="actions">
-            {isAuthenticated ? (
+                {isAuthenticated ? (
               <>
                 <span className="user-name">Hola, {user.username || user.email}</span>
                 <button onClick={handleLogout} className="logout-btn">Cerrar sesión</button>
               </>
+        
             ) : (
               <>
                 <Link to="/login" className="user-link">Iniciar Sesión</Link>
