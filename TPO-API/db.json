@@ -27,7 +27,8 @@
       "description": "2020 Mini Proyector de Película, 5000 LUX Full HD 1080P, compatible con USB/HDMI/VGA/Computadora/Portátil/iPhone/TV Stick/Tarjeta TF.",
       "image": "https://m.media-amazon.com/images/I/51CnRBSVnrL._AC_SL1500_.jpg",
       "categoryId": "3",
-      "id": "1"
+      "id": "1",
+      "featured": true
     },
     {
       "id": "2",
@@ -37,7 +38,8 @@
       "description": "Mini proyector de 7500 lúmenes para películas al aire libre, hasta 170 pulgadas.",
       "image": "https://sistema.langtecnologia.com.ar/img/qloud/2572/8140_1.jpg",
       "categoryId": "3",
-      "sellerId": 2
+      "sellerId": 2,
+      "featured": true
     },
     {
       "id": "3",
@@ -47,7 +49,8 @@
       "description": "Proyector portátil con soporte 4K, altavoz base de sonido, compatible con HDMI y USB.",
       "image": "https://m.media-amazon.com/images/I/51AQ01HrQPL._AC_SL1200_.jpg",
       "categoryId": "3",
-      "sellerId": 3
+      "sellerId": 3,
+      "featured": true
     },
     {
       "id": "4",
@@ -57,7 +60,8 @@
       "description": "Proyector de cine portátil nativo 1080P, 15000 lúmenes, compatible con TV Stick.",
       "image": "https://www.el-pentagono.com.ar/mods/html/fil/Model/Product/1106/650dbf706e72c-proyector.png.webp",
       "categoryId": "3",
-      "sellerId": 2
+      "sellerId": 2,
+      "featured": false
     },
     {
       "id": "6",
@@ -66,7 +70,8 @@
       "stock": 8,
       "description": "Laptop gaming Asus ROG Zephyrus G14, AMD Ryzen 9, RTX 4060, 16GB RAM, 1TB SSD",
       "image": "https://rog.asus.com/media/1704422069620.jpg",
-      "categoryId": "1"
+      "categoryId": "1",
+      "featured": true
     },
     {
       "id": "7",
@@ -75,7 +80,8 @@
       "stock": 15,
       "description": "Motorola Edge 40 Pro 5G, 256GB, 12GB RAM, Pantalla pOLED 165Hz",
       "image": "https://http2.mlstatic.com/D_NQ_NP_2X_756726-MLA91961241747_092025-F.webp",
-      "categoryId": "2"
+      "categoryId": "2",
+      "featured": false
     },
     {
       "id": "8",
@@ -84,7 +90,8 @@
       "stock": 20,
       "description": "Auriculares TWS Sony WF-1000XM5 con cancelación de ruido y LDAC",
       "image": "https://http2.mlstatic.com/D_NQ_NP_2X_811234-MLA87124107828_072025-F.webp",
-      "categoryId": "3"
+      "categoryId": "3",
+      "featured": false
     },
     {
       "id": "9",
@@ -93,7 +100,8 @@
       "stock": 10,
       "description": "Lenovo Tab P11 Pro Gen 2, 11.5 pulgadas OLED, 8GB RAM, 256GB",
       "image": "https://http2.mlstatic.com/D_NQ_NP_2X_725459-MLA90932261617_082025-F.webp",
-      "categoryId": "4"
+      "categoryId": "4",
+      "featured": false
     },
     {
       "id": "10",
@@ -102,7 +110,8 @@
       "stock": 18,
       "description": "Parlante Bluetooth Marshall Emberton II, 30h de batería, resistente al agua",
       "image": "https://http2.mlstatic.com/D_NQ_NP_2X_704126-MLA83892805401_042025-F.webp",
-      "categoryId": "3"
+      "categoryId": "3",
+      "featured": false
     },
     {
       "id": "11",
@@ -111,7 +120,8 @@
       "stock": 6,
       "description": "MSI Katana 15 Gaming Laptop, Intel i7 13th Gen, RTX 4060, 16GB RAM, RGB",
       "image": "https://http2.mlstatic.com/D_NQ_NP_2X_861585-MLU78452884498_082024-F.webp",
-      "categoryId": "1"
+      "categoryId": "1",
+      "featured": false
     },
     {
       "id": "12",
@@ -120,7 +130,8 @@
       "stock": 12,
       "description": "El iPhone 13 (128 GB),cámara dual de 12 MP con modo noche y grabación 4K, chip A15 Bionic, batería de larga duración y resistencia al agua y polvo (IP68). ",
       "image": "https://http2.mlstatic.com/D_NQ_NP_2X_973345-MLA47781591382_102021-F.webp",
-      "categoryId": "2"
+      "categoryId": "2",
+      "featured": true
     },
     {
       "id": "13",
@@ -129,16 +140,18 @@
       "stock": 25,
       "description": "Samsung Galaxy Buds2 Pro con cancelación de ruido activa y audio 360",
       "image": "https://http2.mlstatic.com/D_NQ_NP_2X_978950-MLU76912399120_062024-F.webp",
-      "categoryId": "3"
+      "categoryId": "3",
+      "featured": false
     },
     {
       "id": "14",
       "name": "Samsung Galaxy Tab S9 Ultra",
       "price": 1199.99,
       "stock": 7,
-      "description": "Samsung Galaxy Tab S9 Ultra, 14.6\", Snapdragon 8 Gen 2, 12GB RAM, S Pen",
+  "description": "Samsung Galaxy Tab S9 Ultra, 14.6 pulgadas, Snapdragon 8 Gen 2, 12GB RAM, S Pen",
       "image": "https://http2.mlstatic.com/D_NQ_NP_2X_764083-MLA92036709199_092025-F.webp",
-      "categoryId": "4"
+      "categoryId": "4",
+      "featured": false
     },
     {
       "id": "15",
@@ -147,7 +160,8 @@
       "stock": 5,
       "description": "Macbook Air 13'M3 16GB RAM 256GB SSD - Space Grey",
       "image": "https://ipowerresale.com/cdn/shop/files/media_2872d38b-74f9-44d4-bf51-7773372242ed.png?v=1737158578",
-      "categoryId": "1"
+      "categoryId": "1",
+      "featured": false
     },
     {
       "id": "16",
@@ -156,7 +170,8 @@
       "stock": 14,
       "description": "JBL GO 4 Camuflado ofrece un sonido natural, con gran claridad y precisión, que se dispersa de manera uniforme. Un parlante que asegura potencia y calidad en la reproducción de contenidos multimedia.",
       "image": "https://http2.mlstatic.com/D_NQ_NP_2X_968112-MLA88370160853_072025-F.webp",
-      "categoryId": "3"
+      "categoryId": "3",
+      "featured": false
     },
     {
       "id": "17",
@@ -165,7 +180,8 @@
       "stock": 8,
       "description": "Samsung Galaxy S25 Ultra tiene pantalla AMOLED de 6,9' 120GHz, cámaras de 200 MP + 50 MP + 10 MP + 50 MP, frontal 12 MP, Snapdragon 8 Elite, 12 GB RAM, 256–1024 GB, batería 5000 mAh con carga rápida, S Pen integrado, Android 15, IP68 y conectividad 5G/Wi-Fi 7.",
       "image": "https://http2.mlstatic.com/D_NQ_NP_2X_709755-MLA81772348094_012025-F.webp",
-      "categoryId": "2"
+      "categoryId": "2",
+      "featured": false
     },
     {
       "id": "18",
@@ -174,7 +190,8 @@
       "stock": 16,
       "description": "iPad Pro 11' WiFi M4 256GB con Standard Glass - Space Black",
       "image": "https://cdn-ipoint.waugi.com.ar/28208-thickbox_default/ipad-pro-11-wifi-m4-256gb-con-standard-glass-space-black.jpg",
-      "categoryId": "4"
+      "categoryId": "4",
+      "featured": false
     }
   ],
   "categories": [
