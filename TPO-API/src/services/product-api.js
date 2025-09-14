@@ -49,14 +49,19 @@ function getProducts() {
 
 function getProductById(id) {
   return fetch(`http://localhost:3001/products/${id}`)
-    .then((response) => response.json())
-    .then((data) => {
-      // Aquí puedes manejar los datos de los productos
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Producto no encontrado');
+      }
+      return response.json();
+    })
+    .then(data => {
       console.log("Producto obtenido:", data);
       return data;
     })
-    .catch((error) => {
-      console.error("Error al obtener producto:", error);
+    .catch(error => {
+      console.error("Error al obtener el producto:", error);
+      throw error;
     });
 }
 
