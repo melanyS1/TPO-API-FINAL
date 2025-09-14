@@ -10,6 +10,8 @@ import "./Header.css";
 
 const Header = () => {
   const { showCartPopOver, setShowCartPopOver } = useCart();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef(null);
   const { user, isAuthenticated, logout } = useUser();
   const navigate = useNavigate();
   const [openCategories, setOpenCategories] = useState(false);
@@ -25,12 +27,23 @@ const Header = () => {
       .then(data => setCategories(data))
       .catch(error => console.error('Error loading categories:', error));
   }, []);
+  
 
   const handleLogout = () => {
     logout();
     navigate("/");
   };
 
+  useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+      setIsUserMenuOpen(false);
+    }
+  };
+
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => document.removeEventListener('mousedown', handleClickOutside);
+}, [userMenuRef]);
   // Referencia para el menú desplegable
   const menuRef = useRef(null);
 
@@ -93,10 +106,34 @@ const Header = () => {
 
           <div className="actions">
             {isAuthenticated ? (
-              <>
-                <span className="user-name">Hola, {user.username || user.email}</span>
-                <button onClick={handleLogout} className="logout-btn">Cerrar sesión</button>
-              </>
+              <div className="user-menu" ref={userMenuRef}>
+                <span 
+                  className="user-name" 
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                >
+                  Hola, {user.username || user.email} ▾
+                </span>
+                {isUserMenuOpen && (
+                  <div className="user-dropdown">
+                    <Link 
+                      to="/mis-productos" 
+                      className="dropdown-item"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      Mis Productos
+                    </Link>
+                    <button 
+                      onClick={() => {
+                        handleLogout();
+                        setIsUserMenuOpen(false);
+                      }} 
+                      className="dropdown-item"
+                    >
+                      Cerrar sesión
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <>
                 <Link to="/login" className="user-link">Iniciar Sesión</Link>
@@ -106,7 +143,6 @@ const Header = () => {
             )}
             <Link to="/cart" className="cart-icon">🛒</Link>
           </div>
-        </div>
 
         <nav className="nav">
           <ul>
@@ -140,6 +176,7 @@ const Header = () => {
             </li>
           </ul>
         </nav>
+      </div>
       </header>
 
       {showCartPopOver && (
