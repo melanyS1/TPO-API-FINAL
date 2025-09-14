@@ -5,7 +5,12 @@ import { useNavigate } from 'react-router-dom';
 
 const FeaturedProducts = () => {
   const products = useGetProducts();
-  const featuredProducts = products && products.length > 0 ? products.slice(0, 4) : [];
+  // Filtrar destacados y mezclar aleatoriamente
+  const getRandomFeatured = (arr, n) => {
+    const shuffled = arr.slice().sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, n);
+  };
+  const featuredProducts = products && products.length > 0 ? getRandomFeatured(products.filter(p => p.featured), 6) : [];
   const navigate = useNavigate();
 
   return (
@@ -20,12 +25,14 @@ const FeaturedProducts = () => {
                 <h3>{product.name}</h3>
                 <p>{product.description}</p>
                 <span className="price">${product.price}</span>
-                <button
-                  className="featured-button"
-                  onClick={() => navigate(`/products/${product.id}`)}
-                >
-                  Ver Detalles
-                </button>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+                  <button
+                    className="featured-button"
+                    onClick={() => navigate(`/products/${product.id}`)}
+                  >
+                    Ver Detalles
+                  </button>
+                </div>
               </div>
             </div>
           ))
