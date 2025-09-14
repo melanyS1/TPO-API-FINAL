@@ -63,8 +63,7 @@ export default function ProductDetail() {
         </div>
         <div className="product-detail-info">
           <h1>{product.name}</h1>
-          <div className="price">Precio: ${product.price.toFixed(2)}</div>
-          <div className="price">Precio: ${product.price.toFixed(2)}</div>
+          <div className="price"> ${Number(product.price).toFixed(2)}</div>
           <div
             className="stock"
             style={{ color: inStock ? "green" : "crimson" }}
