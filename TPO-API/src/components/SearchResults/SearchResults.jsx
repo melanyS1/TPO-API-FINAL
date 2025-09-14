@@ -10,7 +10,7 @@ const SearchResults = ({ results, visible, onResultClick }) => {
       {results.map(product => (
         <Link 
           key={product.id} 
-          to={`/product/${product.id}`}
+          to={`/products/${product.id}`}
           className="search-result-item"
           onClick={() => onResultClick()}
         >
