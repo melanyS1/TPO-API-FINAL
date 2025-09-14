@@ -30,7 +30,7 @@
 .cart-item {
     margin-bottom: 10px;
     display: flex;
-    align-items: center; /* Centra verticalmente */
+    align-items: center; 
     justify-content: space-between; 
     background-color: #fff;
     border-radius: 12px;

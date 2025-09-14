@@ -9,11 +9,27 @@ import "./ProductDetail.css";
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = useGetProductById(id);
+  const { product, loading, error } = useGetProductById(id);
   const { addToCart, setShowCartPopOver } = useCart();
   const [qty, setQty] = useState(1);
 
-  if (!product) return <div className="container">Producto no encontrado.</div>;
+  if (loading) return (
+    <div className="container" style={{ padding: "2rem", textAlign: "center" }}>
+      Cargando producto...
+    </div>
+  );
+
+  if (error) return (
+    <div className="container" style={{ padding: "2rem", textAlign: "center" }}>
+      Error: {error}
+    </div>
+  );
+
+  if (!product) return (
+    <div className="container" style={{ padding: "2rem", textAlign: "center" }}>
+      Producto no encontrado.
+    </div>
+  );
 
   const inStock = product.stock > 0;
   const max = product.stock;
