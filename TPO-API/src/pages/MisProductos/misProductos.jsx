@@ -85,8 +85,21 @@ const MisProductos = () => {
 
   const saveEdit = async (id) => {
     try {
-      const body = { ...form, price: parseFloat(form.price), stock: Number(form.stock) };
-      const res = await fetch(`${API_URL}/products/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      // Buscar el producto original en la lista
+      const original = products.find(p => String(p.id) === String(id));
+      if (!original) throw new Error('Producto original no encontrado');
+      // Combinar los datos originales con los nuevos
+      const body = {
+        ...original,
+        ...form,
+        price: parseFloat(form.price),
+        stock: Number(form.stock)
+      };
+      const res = await fetch(`${API_URL}/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
       if (!res.ok) throw new Error('No se pudo actualizar');
       // refrescar lista
       await fetchProducts();
