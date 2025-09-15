@@ -27,14 +27,19 @@ function App() {
               <Route path="/products" element={<Products />} />
               <Route path="/products/category/:categoryId" element={<Products />} /> 
               <Route path="/products/:id" element={<ProductDetail />} />
-              <Route path="/thank-you" element={<ThankYouPage />} />
-              <Route path="/mis-productos" element={<MisProductos />} />
-              <Route path="/cart" 
+              <Route path="/thank-you" 
                 element={
                   <ProtectedRoute>
-                    <Cart />
+                    <ThankYouPage />
                   </ProtectedRoute>
                 } />
+              <Route path="/mis-productos" 
+                element={
+                  <ProtectedRoute>
+                    <MisProductos />
+                  </ProtectedRoute>
+                } />
+              <Route path="/cart" element={<Cart />} />
             </Routes>
           </main>
         </Router>
