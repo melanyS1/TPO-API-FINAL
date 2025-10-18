@@ -35,6 +35,14 @@ public class ProductoService {
                 .orElse(null);
     }
 
+    // Devuelve todos los productos de un vendedor ordenados por nombre ascendente
+    public List<ProductResponse> getProductosBySellerId(Long sellerId) {
+        return productoRepository.findAllBySellerIdOrderByNameAsc(sellerId)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     private ProductResponse convertToDTO(Producto p) {
         // Mapeo de categorías
         List<CategoryDTO> categorias = p.getCategories()
