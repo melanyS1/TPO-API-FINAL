@@ -20,6 +20,7 @@ public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
+    //Trae todos los productos ordenados por nombre ascendente
     public List<ProductResponse> getAllProductos() {
     return productoRepository.findAllByOrderByNameAsc()
         .stream()
@@ -27,6 +28,7 @@ public class ProductoService {
         .collect(Collectors.toList());
     }
 
+    //Trae un producto por su ID
     public ProductResponse getProductoById(Long id) {
         return productoRepository.findById(id)
                 .map(this::convertToDTO)
