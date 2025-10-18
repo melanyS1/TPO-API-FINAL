@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.api.e_commerce.dto.*;
-import com.api.e_commerce.model.*;
+import com.api.e_commerce.dto.CategoryDTO;
+import com.api.e_commerce.dto.ProductResponse;
+import com.api.e_commerce.dto.SellerDTO;
+import com.api.e_commerce.model.Producto;
 import com.api.e_commerce.repository.ProductoRepository;
 
 @Service
@@ -19,10 +21,10 @@ public class ProductoService {
     private ProductoRepository productoRepository;
 
     public List<ProductResponse> getAllProductos() {
-        return productoRepository.findAll()
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    return productoRepository.findAllByOrderByNameAsc()
+        .stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
     }
 
     public ProductResponse getProductoById(Long id) {
