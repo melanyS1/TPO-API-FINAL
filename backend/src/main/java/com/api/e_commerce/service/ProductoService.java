@@ -43,6 +43,24 @@ public class ProductoService {
                 .collect(Collectors.toList());
     }
 
+    // Buscar productos por término en nombre o descripción
+    public List<ProductResponse> searchProductos(String q) {
+        return productoRepository
+                .findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrderByNameAsc(q, q)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    // Devuelve productos pertenecientes a una categoría (por id)
+    public List<ProductResponse> getProductosByCategoryId(Long categoryId) {
+        return productoRepository
+                .findAllByCategories_IdOrderByNameAsc(categoryId)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     private ProductResponse convertToDTO(Producto p) {
         // Mapeo de categorías
         List<CategoryDTO> categorias = p.getCategories()

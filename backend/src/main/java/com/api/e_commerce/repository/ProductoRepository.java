@@ -12,4 +12,11 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
 	// Devuelve productos de un vendedor ordenados por nombre ascendente
 	List<Producto> findAllBySellerIdOrderByNameAsc(Long sellerId);
+
+	// Buscar por nombre o descripción (ignore case) y ordenar por nombre
+	List<Producto> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrderByNameAsc(
+			String namePart, String descriptionPart);
+
+	// Buscar productos por id de categoría (ManyToMany -> categories.id)
+	List<Producto> findAllByCategories_IdOrderByNameAsc(Long categoryId);
 }

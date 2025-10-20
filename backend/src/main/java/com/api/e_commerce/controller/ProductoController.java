@@ -21,9 +21,13 @@ public class ProductoController {
 
 
     @GetMapping
-    public List<ProductResponse> getProductos(@RequestParam(value = "sellerId", required = false) Long sellerId) {
+    public List<ProductResponse> getProductos(
+            @RequestParam(value = "sellerId", required = false) Long sellerId,
+            @RequestParam(value = "search", required = false) String search) {
         if (sellerId != null) {
             return productoService.getProductosBySellerId(sellerId);
+        } else if (search != null && !search.isBlank()) {
+            return productoService.searchProductos(search);
         } else {
             return productoService.getAllProductos();
         }
@@ -32,6 +36,12 @@ public class ProductoController {
     @GetMapping("/{id}")
     public ProductResponse getProductoById(@PathVariable Long id) {
         return productoService.getProductoById(id);
+    }
+
+    // Lista productos que pertenecen a una categoría
+    @GetMapping("/category/{categoryId}")
+    public List<ProductResponse> getProductosByCategory(@PathVariable Long categoryId) {
+        return productoService.getProductosByCategoryId(categoryId);
     }
 
     /*
