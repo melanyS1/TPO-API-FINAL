@@ -1,3 +1,4 @@
+
 DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `id` bigint(20) NOT NULL,
@@ -220,6 +221,8 @@ ALTER TABLE `items_carrito`
   ADD CONSTRAINT `FK_carrito_productoId` FOREIGN KEY (`productoId`) REFERENCES `products` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_carrito_usuarioId` FOREIGN KEY (`usuarioId`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
+
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
