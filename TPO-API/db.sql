@@ -1,4 +1,3 @@
-
 DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `id` bigint(20) NOT NULL,
@@ -115,6 +114,21 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`) VALUES
 (2, 'maria456', 'maria@example.com', '123', NULL),
 (2147483647, 'Gabriela', 'gaby@ejemplo.com', '123', NULL);
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `items_carrito`
+--
+
+DROP TABLE IF EXISTS `items_carrito`;
+CREATE TABLE `items_carrito` (
+  `id` bigint(20) NOT NULL,
+  `productoId` bigint(20) NOT NULL,
+  `usuarioId` bigint(20) DEFAULT NULL,
+  `sessionId` varchar(255) DEFAULT NULL,
+  `cantidad` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Índices para tablas volcadas
 --
@@ -146,6 +160,15 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `items_carrito`
+--
+ALTER TABLE `items_carrito`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_carrito_productoId` (`productoId`),
+  ADD KEY `FK_carrito_usuarioId` (`usuarioId`),
+  ADD KEY `idx_sessionId` (`sessionId`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -168,6 +191,12 @@ ALTER TABLE `users`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2147483648;
 
 --
+-- AUTO_INCREMENT de la tabla `items_carrito`
+--
+ALTER TABLE `items_carrito`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+--
 -- Restricciones para tablas volcadas
 --
 
@@ -183,6 +212,13 @@ ALTER TABLE `products`
 ALTER TABLE `products_categories`
   ADD CONSTRAINT `FKg37gcrv9n55qu10axwkl8ruyw` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`id`),
   ADD CONSTRAINT `FKkaswq49cqw38u8tguh6tsm6qf` FOREIGN KEY (`productId`) REFERENCES `products` (`id`);
+
+--
+-- Filtros para la tabla `items_carrito`
+--
+ALTER TABLE `items_carrito`
+  ADD CONSTRAINT `FK_carrito_productoId` FOREIGN KEY (`productoId`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_carrito_usuarioId` FOREIGN KEY (`usuarioId`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
