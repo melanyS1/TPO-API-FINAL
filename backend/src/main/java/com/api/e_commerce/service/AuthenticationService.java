@@ -1,4 +1,4 @@
-/*package com.api.e_commerce.service;
+package com.api.e_commerce.service;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.api.e_commerce.dto.LoginRequest;
 import com.api.e_commerce.dto.RegisterRequest;
+import com.api.e_commerce.dto.UserResponse;
 import com.api.e_commerce.model.Role;
 import com.api.e_commerce.model.Usuario;
 import com.api.e_commerce.repository.UsuarioRepository;
@@ -40,15 +41,12 @@ public class AuthenticationService {
         // usuario.setRole(Role.USER);
 
 
-        //viene de Lombok (@Builder) y facilita la creación de objetos de manera más limpia y fluida
-        Usuario usuario = Usuario.builder()
-                .nombre(request.getNombre())
-                .apellido(request.getApellido())
-                .email(request.getEmail())
-                // encriptado la pass que envío el usuario
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER) // Por defecto, todos los usuarios nuevos son USER
-                .build();
+        // crear el usuario manualmente usando setters en lugar del builder (evita llamadas a métodos del builder que no existen)
+        Usuario usuario = new Usuario();
+        usuario.setEmail(request.getEmail());
+        // encriptado la pass que envío el usuario
+        usuario.setPassword(passwordEncoder.encode(request.getPassword()));
+        usuario.setRole(Role.USER); // Por defecto, todos los usuarios nuevos son USER
 
 
         usuarioRepository.save(usuario);
@@ -71,7 +69,7 @@ public class AuthenticationService {
      * - Si todo es correcto, crea un nuevo token autenticado con los roles/authorities del usuario
      *  
      *
-     *//*
+     */
     public String authenticate(LoginRequest request) {
         //verifica que exista el email y que la pass sea correcta
         // busca el email en la db
@@ -85,4 +83,16 @@ public class AuthenticationService {
 
         return "Login successful";
     }
-}*/
+
+    public UserResponse getCurrentUser(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+        return new UserResponse(
+            usuario.getId(),
+            usuario.getUsername(),
+            usuario.getEmail(),
+            usuario.getRole()
+        );
+    }
+}

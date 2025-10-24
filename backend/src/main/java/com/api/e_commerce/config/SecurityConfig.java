@@ -116,7 +116,7 @@ public class SecurityConfig {
                         // Cualquier otra ruta requiere autenticación
                         // con esta linea abarca requiere que todos los endpoints esten autenticados
                         // no seía necesario post, put, delete /api/productos , api/pedidos
-                        .anyRequest().authenticated());
+                        .anyRequest().permitAll());
 
         return http.build();
     }
