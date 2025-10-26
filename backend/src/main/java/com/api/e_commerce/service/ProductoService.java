@@ -85,4 +85,72 @@ public class ProductoService {
             seller
         );
     }
+    // CREAR UN NUEVO PRODUCTO - PUBLICACIÓN - RROD
+    public ProductResponse createProducto(com.api.e_commerce.dto.PublicacionRequest req) {
+        Producto p = new Producto();
+        p.setName(req.getName());
+        p.setPrice(req.getPrice());
+        p.setStock(req.getStock());
+        p.setDescription(req.getDescription());
+        p.setImage(req.getImage());
+        p.setFeatured(req.isFeatured());
+
+        // SETEAR VENDEDOR SI ES PROPORCIONADO - PUBLICACIÓN - RROD
+        if (req.getSellerId() != null) {
+            usuarioRepository.findById(req.getSellerId()).ifPresent(p::setSeller);
+        }
+
+        // SETEAR CATEGORÍAS SI ES PROPORCIONADA - PUBLICACIÓN - RROD
+        if (req.getCategoryIds() != null && !req.getCategoryIds().isEmpty()) {
+            List<com.api.e_commerce.model.Categoria> cats = req.getCategoryIds().stream()
+                    .map(id -> categoriaRepository.findById(id).orElse(null))
+                    .filter(c -> c != null)
+                    .collect(Collectors.toList());
+            p.setCategories(cats);
+        }
+
+        Producto saved = productoRepository.save(p);
+        return convertToDTO(saved);
+    }
+
+    // ACTUALIZAR PRODUCTO EXISTENTE - PUBLICACIÓN - RROD
+    public ProductResponse updateProducto(Long id, com.api.e_commerce.dto.PublicacionRequest req) {
+        return productoRepository.findById(id).map(p -> {
+            if (req.getName() != null) p.setName(req.getName());
+            p.setPrice(req.getPrice());
+            p.setStock(req.getStock());
+            p.setDescription(req.getDescription());
+            p.setImage(req.getImage());
+            p.setFeatured(req.isFeatured());
+
+            if (req.getSellerId() != null) {
+                usuarioRepository.findById(req.getSellerId()).ifPresent(p::setSeller);
+            }
+
+            if (req.getCategoryIds() != null) {
+                List<com.api.e_commerce.model.Categoria> cats = req.getCategoryIds().stream()
+                        .map(cid -> categoriaRepository.findById(cid).orElse(null))
+                        .filter(c -> c != null)
+                        .collect(Collectors.toList());
+                p.setCategories(cats);
+            }
+
+            Producto saved = productoRepository.save(p);
+            return convertToDTO(saved);
+        }).orElse(null);
+    }
+
+    // ELIMINAR PROUDCTO POR ID - PUBLICACIÓN - RROD
+    public void deleteProducto(Long id) {
+        productoRepository.deleteById(id);
+    }
+
+    // ACTUALIZAR STOCK DE PRODUCTO - PUBLICACIÓN - RROD
+    public ProductResponse updateStock(Long id, int newStock) {
+        return productoRepository.findById(id).map(p -> {
+            p.setStock(newStock);
+            Producto saved = productoRepository.save(p);
+            return convertToDTO(saved);
+        }).orElse(null);
+    }    
 }
