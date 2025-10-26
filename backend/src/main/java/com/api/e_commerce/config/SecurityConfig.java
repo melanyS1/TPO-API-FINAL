@@ -4,6 +4,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,19 +21,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.api.e_commerce.repository.UsuarioRepository;
+import com.api.e_commerce.security.JwtAuthenticationFilter;
+import com.api.e_commerce.security.JwtService;
 
-import lombok.RequiredArgsConstructor;
+// Se elimina @RequiredArgsConstructor para proporcionar un constructor explícito
 
 // Indica que esta clase contiene configuraciones de Spring
 @Configuration
 // Habilita la seguridad web de Spring Security
 @EnableWebSecurity
 // Genera un constructor con los campos final requeridos lombok 
-@RequiredArgsConstructor
 public class SecurityConfig {
 
-    // Inyección del repositorio de usuarios
+    // Inyección del repositorio de usuarios y servicios necesarios
     private final UsuarioRepository usuarioRepository;
+    private final JwtService jwtService;
+
+    // Constructor explícito para inicializar campos final.
+    public SecurityConfig(UsuarioRepository usuarioRepository, JwtService jwtService) {
+        this.usuarioRepository = usuarioRepository;
+        this.jwtService = jwtService;
+    }
 
     // Cargar los datos del usuario desde tu sistema a través de UsuarioRepository
     @Bean
@@ -78,6 +93,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
     // Configura las reglas de seguridad para las diferentes rutas de la API
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -90,14 +113,17 @@ public class SecurityConfig {
 
         // return http.build();
 
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
+    http
+        .csrf(csrf -> csrf.disable())
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(auth -> auth
                         // Rutas públicas que no requieren autenticación
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         // Permitir acceso público a las categorías (GET)
                         .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/publicaciones/**").permitAll()
                         
                         // Rutas del carrito - permitir sin autenticación para carritos temporales
                         .requestMatchers("/api/carrito/**").permitAll()
@@ -106,6 +132,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/products").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/products/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/products/**").authenticated()
+
+                        // Publicaciones: GET público, crear/editar/eliminar requiere autenticación
+                        .requestMatchers(HttpMethod.POST, "/api/publicaciones").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/publicaciones/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/publicaciones/**").authenticated()
 
                         // Rutas exclusivas para administradores
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
@@ -118,6 +149,22 @@ public class SecurityConfig {
                         // no seía necesario post, put, delete /api/productos , api/pedidos
                         .anyRequest().authenticated());
 
+        // Add JWT filter before UsernamePasswordAuthenticationFilter
+        JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtService, userDetailsService());
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
