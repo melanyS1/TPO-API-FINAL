@@ -96,8 +96,10 @@ public class SecurityConfig {
                         // Rutas públicas que no requieren autenticación
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
-                        // Permitir acceso público a las categorías (GET)
                         .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/publicaciones/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/publicaciones/**").permitAll()
+                        
                         
                         // Rutas del carrito - permitir sin autenticación para carritos temporales
                         .requestMatchers("/api/carrito/**").permitAll()

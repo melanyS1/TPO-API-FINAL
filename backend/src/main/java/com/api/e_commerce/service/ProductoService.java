@@ -85,4 +85,19 @@ public class ProductoService {
             seller
         );
     }
+
+
+    // ELIMINAR PROUDCTO POR ID - PUBLICACIÓN - RROD
+    public void deleteProducto(Long id) {
+        productoRepository.deleteById(id);
+    }
+
+    // ACTUALIZAR STOCK DE PRODUCTO - PUBLICACIÓN - RROD
+    public ProductResponse updateStock(Long id, int newStock) {
+        return productoRepository.findById(id).map(p -> {
+            p.setStock(newStock);
+            Producto saved = productoRepository.save(p);
+            return convertToDTO(saved);
+        }).orElse(null);
+    }    
 }
