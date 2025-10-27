@@ -99,6 +99,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/publicaciones/**").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/publicaciones/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/publicaciones/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/publicaciones/**").permitAll()
                         
                         
                         // Rutas del carrito - permitir sin autenticación para carritos temporales
