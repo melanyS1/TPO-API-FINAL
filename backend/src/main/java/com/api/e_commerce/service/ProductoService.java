@@ -12,6 +12,11 @@ import com.api.e_commerce.dto.ProductResponse;
 import com.api.e_commerce.dto.SellerDTO;
 import com.api.e_commerce.model.Producto;
 import com.api.e_commerce.repository.ProductoRepository;
+import com.api.e_commerce.dto.PublicacionRequest;
+import com.api.e_commerce.model.Categoria;
+import com.api.e_commerce.model.Usuario;
+import com.api.e_commerce.repository.CategoriaRepository;
+import com.api.e_commerce.repository.UsuarioRepository;
 
 @Service
 @Transactional
@@ -20,12 +25,44 @@ public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     //Trae todos los productos ordenados por nombre ascendente
     public List<ProductResponse> getAllProductos() {
     return productoRepository.findAllByOrderByNameAsc()
         .stream()
         .map(this::convertToDTO)
         .collect(Collectors.toList());
+    }
+
+    // CREAR PRODUCTO (PUBLICACION)
+    public ProductResponse crearProducto(PublicacionRequest request) {
+        Producto producto = new Producto();
+        producto.setName(request.getName());
+        producto.setPrice(request.getPrice());
+        producto.setStock(request.getStock());
+        producto.setDescription(request.getDescription());
+        producto.setImage(request.getImage());
+        producto.setFeatured(request.isFeatured());
+
+        // Asociar categorías
+        if (request.getCategories() != null && !request.getCategories().isEmpty()) {
+            List<Categoria> categorias = categoriaRepository.findAllById(request.getCategories());
+            producto.setCategories(categorias);
+        }
+
+        // Asociar vendedor
+        if (request.getSellerId() != null) {
+            Usuario vendedor = usuarioRepository.findById(request.getSellerId()).orElse(null);
+            producto.setSeller(vendedor);
+        }
+
+        Producto saved = productoRepository.save(producto);
+        return convertToDTO(saved);
     }
 
     //Trae un producto por su ID
@@ -84,5 +121,41 @@ public class ProductoService {
             categorias,
             seller
         );
+    }
+
+
+    // ELIMINAR PROUDCTO POR ID - PUBLICACIÓN - RROD
+    public void deleteProducto(Long id) {
+        productoRepository.deleteById(id);
+    }
+
+    // ACTUALIZAR STOCK DE PRODUCTO - PUBLICACIÓN - RROD
+    public ProductResponse updateStock(Long id, int newStock) {
+        return productoRepository.findById(id).map(p -> {
+            p.setStock(newStock);
+            Producto saved = productoRepository.save(p);
+            return convertToDTO(saved);
+        }).orElse(null);
+    }    
+
+    // MODIFICAR PRODUCTO (PUBLICACION)
+    public ProductResponse updateProducto(Long id, PublicacionRequest request) {
+        return productoRepository.findById(id).map(producto -> {
+            producto.setName(request.getName());
+            producto.setPrice(request.getPrice());
+            producto.setStock(request.getStock());
+            producto.setDescription(request.getDescription());
+            producto.setImage(request.getImage());
+            producto.setFeatured(request.isFeatured());
+
+            // Actualizar categorías
+            if (request.getCategories() != null && !request.getCategories().isEmpty()) {
+                List<Categoria> categorias = categoriaRepository.findAllById(request.getCategories());
+                producto.setCategories(categorias);
+            }
+            // No modificar sellerId: el vendedor original permanece
+            Producto saved = productoRepository.save(producto);
+            return convertToDTO(saved);
+        }).orElse(null);
     }
 }
