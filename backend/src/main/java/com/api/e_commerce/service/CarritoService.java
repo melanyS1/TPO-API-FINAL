@@ -21,6 +21,44 @@ import com.api.e_commerce.repository.UsuarioRepository;
 @Transactional
 public class CarritoService {
 
+    // Procesar carrito: calcular total y descontar stock
+    @Transactional
+    public com.api.e_commerce.dto.CarritoTotalResponse procesarCarrito(Long usuarioId, String sessionId) {
+        java.util.List<ItemCarrito> items;
+        if (usuarioId != null) {
+            items = carritoRepository.findByUsuarioId(usuarioId);
+        } else if (sessionId != null && !sessionId.trim().isEmpty()) {
+            items = carritoRepository.findBySessionId(sessionId);
+        } else {
+            throw new RuntimeException("Debe proporcionar usuarioId o sessionId");
+        }
+
+        if (items.isEmpty()) {
+            return new com.api.e_commerce.dto.CarritoTotalResponse(0.0, "El carrito está vacío");
+        }
+
+        double total = 0.0;
+        for (ItemCarrito item : items) {
+            Producto producto = item.getProducto();
+            int cantidad = item.getCantidad();
+            if (producto.getStock() < cantidad) {
+                throw new RuntimeException("Stock insuficiente para el producto: " + producto.getName());
+            }
+            producto.setStock(producto.getStock() - cantidad);
+            productoRepository.save(producto);
+            total += item.getSubtotal();
+        }
+
+        // Vaciar el carrito después de procesar
+        if (usuarioId != null) {
+            vaciarCarritoPorUsuario(usuarioId);
+        } else {
+            vaciarCarritoPorSession(sessionId);
+        }
+
+        return new com.api.e_commerce.dto.CarritoTotalResponse(total, "Compra realizada con éxito");
+    }
+
     @Autowired
     private CarritoRepository carritoRepository;
     
