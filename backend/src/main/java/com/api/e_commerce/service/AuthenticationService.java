@@ -42,16 +42,16 @@ public class AuthenticationService {
         // usuario.setRole(Role.USER);
 
 
-        // crear el usuario manualmente usando setters en lugar del builder (evita llamadas a métodos del builder que no existen)
-        Usuario usuario = new Usuario();
-        usuario.setEmail(request.getEmail());
-        // encriptado la pass que envío el usuario
-        usuario.setPassword(passwordEncoder.encode(request.getPassword()));
-        usuario.setRole(Role.USER); // Por defecto, todos los usuarios nuevos son USER
+    // crear el usuario manualmente usando setters en lugar del builder (evita llamadas a métodos del builder que no existen)
+    Usuario usuario = new Usuario();
+    usuario.setUsername(request.getUsername());
+    usuario.setEmail(request.getEmail());
+    // encriptado la pass que envío el usuario
+    usuario.setPassword(passwordEncoder.encode(request.getPassword()));
+    usuario.setRole(Role.USER); // Por defecto, todos los usuarios nuevos son USER
 
-
-        usuarioRepository.save(usuario);
-        return "User registered successfully";
+    usuarioRepository.save(usuario);
+    return "User registered successfully";
     }
 
     /**
