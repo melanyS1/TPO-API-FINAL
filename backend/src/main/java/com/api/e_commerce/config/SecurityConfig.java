@@ -85,8 +85,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/publicaciones/**").permitAll()
                         
-                        
-                        // Rutas del carrito - permitir sin autenticación para carritos temporales
+                        // Checkout del carrito: requiere autenticación
+                        .requestMatchers(HttpMethod.POST, "/api/carrito/procesar").authenticated()
+
+                        // Rutas del carrito - permitir sin autenticación para carritos temporales (agregar, ver, eliminar, vaciar)
                         .requestMatchers("/api/carrito/**").permitAll()
 
                         // Rutas que requieren autenticación
