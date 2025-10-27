@@ -16,6 +16,6 @@ public class PublicacionRequest {
     private String description;
     private String image; 
     private boolean featured;
-    private List<Long> categoryIds;
+    private List<Long> categories;
     private Long sellerId;
 }
