@@ -8,15 +8,17 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import com.api.e_commerce.service.JwtService;
-import com.api.e_commerce.repository.UsuarioRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.api.e_commerce.repository.UsuarioRepository;
+import com.api.e_commerce.service.JwtService;
+
+import lombok.RequiredArgsConstructor;
 
 // Indica que esta clase contiene configuraciones de Spring
 @Configuration
@@ -81,10 +83,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/publicaciones/**").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/api/publicaciones/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/publicaciones/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/publicaciones/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/publicaciones/**").permitAll()
                         
                         
                         // Rutas del carrito - permitir sin autenticación para carritos temporales
@@ -92,9 +91,10 @@ public class SecurityConfig {
 
                         // Rutas que requieren autenticación
                         .requestMatchers("/api/auth/me").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/products").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/products/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/products/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/publicaciones/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/publicaciones/**").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/api/publicaciones/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/publicaciones/**").authenticated()
 
                         // Rutas exclusivas para administradores
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
