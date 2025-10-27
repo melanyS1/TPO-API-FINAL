@@ -23,6 +23,7 @@ public class AuthenticationService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     public String register(RegisterRequest request) {
 
@@ -81,7 +82,11 @@ public class AuthenticationService {
                         //para verificar si esta ok la pass se utiliza passwordEncoder, encripta la pass y la compara con la pass encriptada de la db
                         request.getPassword()));
 
-        return "Login successful";
+        var user = usuarioRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        // Generate JWT token
+        return jwtService.generateToken(user);
     }
 
     public UserResponse getCurrentUser(String email) {

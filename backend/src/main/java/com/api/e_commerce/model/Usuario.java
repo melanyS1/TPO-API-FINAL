@@ -43,6 +43,11 @@ public class Usuario implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
 
     /**
      * getAuthorities() devuelve la colección de roles/permisos del usuario
