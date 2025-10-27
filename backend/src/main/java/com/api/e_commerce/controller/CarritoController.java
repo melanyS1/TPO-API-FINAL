@@ -1,3 +1,4 @@
+
 package com.api.e_commerce.controller;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.e_commerce.dto.AgregarCarritoDTO;
 import com.api.e_commerce.dto.CarritoDTO;
 import com.api.e_commerce.service.CarritoService;
+import com.api.e_commerce.dto.CarritoTotalResponse;
 
 @RestController
 @RequestMapping("/api/carrito") // localhost:8080/api/carrito
@@ -23,6 +25,18 @@ public class CarritoController {
 
     @Autowired
     private CarritoService carritoService;
+
+    // POST /api/carrito/procesar - Calcular total y descontar stock
+    @PostMapping("/procesar")
+    public ResponseEntity<CarritoTotalResponse> procesarCarrito(@RequestParam(value = "usuarioId", required = false) Long usuarioId,
+                                                               @RequestParam(value = "sessionId", required = false) String sessionId) {
+        try {
+            CarritoTotalResponse response = carritoService.procesarCarrito(usuarioId, sessionId);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new CarritoTotalResponse(0.0, e.getMessage()));
+        }
+    }
 
     // POST /api/carrito/agregar - Agregar producto al carrito
     @PostMapping("/agregar")
