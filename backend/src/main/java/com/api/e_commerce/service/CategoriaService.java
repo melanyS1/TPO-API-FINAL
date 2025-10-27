@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.api.e_commerce.dto.CategoryDTO;
-import com.api.e_commerce.model.Categoria;
 import com.api.e_commerce.repository.CategoriaRepository;
 
 @Service

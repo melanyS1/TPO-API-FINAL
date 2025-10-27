@@ -28,7 +28,6 @@ public class AuthenticationService {
     public String register(RegisterRequest request) {
 
         if (usuarioRepository.existsByEmail(request.getEmail())) {
-            //TODO: ssanchez - crear exception personalizada y manejar con @ControllerAdvice
             throw new RuntimeException("Email already exists");
         }
 
