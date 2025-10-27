@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import com.api.e_commerce.dto.PublicacionRequest;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.api.e_commerce.dto.ProductResponse;
 import com.api.e_commerce.service.ProductoService;
@@ -32,7 +31,7 @@ public class PublicacionController {
     @PostMapping
     public ResponseEntity<ProductResponse> crearPublicacion(@RequestBody PublicacionRequest request) {
         ProductResponse resp = productoService.crearProducto(request);
-        if (resp == null) return ResponseEntity.badRequest().build();
+        if (resp == null) throw new IllegalArgumentException("Datos de publicación inválidos");
         return ResponseEntity.ok(resp);
     }
     
@@ -46,10 +45,10 @@ public class PublicacionController {
     // PATCH /api/publicaciones/{id}/stock - actualizar stock
     @PatchMapping("/{id}/stock")
     public ResponseEntity<ProductResponse> updateStock(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
-        if (body == null || !body.containsKey("stock")) return ResponseEntity.badRequest().build();
+        if (body == null || !body.containsKey("stock")) throw new IllegalArgumentException("Parámetro 'stock' es requerido");
         Integer stock = body.get("stock");
         ProductResponse resp = productoService.updateStock(id, stock);
-        if (resp == null) return ResponseEntity.notFound().build();
+        if (resp == null) throw new RuntimeException("Producto no encontrado");
         return ResponseEntity.ok(resp);
     }
 
@@ -57,7 +56,7 @@ public class PublicacionController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updatePublicacion(@PathVariable Long id, @RequestBody PublicacionRequest request) {
         ProductResponse resp = productoService.updateProducto(id, request);
-        if (resp == null) return ResponseEntity.notFound().build();
+        if (resp == null) throw new RuntimeException("Producto no encontrado");
         return ResponseEntity.ok(resp);
     }
 }
