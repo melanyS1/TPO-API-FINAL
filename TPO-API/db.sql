@@ -55,7 +55,6 @@ INSERT INTO `products` (`id`, `name`, `price`, `stock`, `description`, `image`, 
 (16, 'Parlante Portatil JBL GO 4 Camuflado', 86.99, 14, 'JBL GO 4 Camuflado ofrece un sonido natural, con gran claridad y precisión.', 'https://http2.mlstatic.com/D_NQ_NP_2X_968112-MLA88370160853_072025-F.webp', 2, 0),
 (17, 'S25 Ultra Samsung', 899.99, 7, 'Samsung Galaxy S25 Ultra tiene pantalla AMOLED de 6,9\' 120GHz.', 'https://http2.mlstatic.com/D_NQ_NP_2X_709755-MLA81772348094_012025-F.webp', 2147483647, 0),
 (18, 'iPad Pro 11', 3780, 16, 'iPad Pro 11\' WiFi M4 256GB con Standard Glass - Space Black', 'https://cdn-ipoint.waugi.com.ar/28208-thickbox_default/ipad-pro-11-wifi-m4-256gb-con-standard-glass-space-black.jpg', 1, 0);
-
 -- --------------------------------------------------------
 
 --

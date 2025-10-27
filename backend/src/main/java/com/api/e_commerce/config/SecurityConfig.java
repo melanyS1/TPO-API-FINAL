@@ -7,15 +7,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import com.api.e_commerce.service.JwtService;
+import com.api.e_commerce.repository.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import com.api.e_commerce.repository.UsuarioRepository;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 // Indica que esta clase contiene configuraciones de Spring
 @Configuration
@@ -25,8 +26,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    // Inyección del repositorio de usuarios
     private final UsuarioRepository usuarioRepository;
+    private final JwtService jwtService;
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(UserDetailsService userDetailsService) {
+        return new JwtAuthenticationFilter(jwtService, userDetailsService);
+    }
 
     // Cargar los datos del usuario desde tu sistema a través de UsuarioRepository
     @Bean
@@ -35,18 +41,6 @@ public class SecurityConfig {
                 //TODO: ssanchez - capturar con globalexceptionhanlder @ControllerAdivce
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-
-    // Recibe las credenciales del usuario (a través del UsernamePasswordAuthenticationToken)
-    // Usa el UserDetailsService para buscar el usuario en la base de datos
-    // Usa el PasswordEncoder para verificar si la contraseña proporcionada coincide con la almacenada
-    // Si todo es correcto, crea un token de autenticación; si no, lanza una excepción    
-    // @Bean
-    // public AuthenticationProvider authenticationProvider() {
-    //     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    //     authProvider.setPasswordEncoder(passwordEncoder());
-    //     authProvider.setUserDetailsService(userDetailsService());
-    //     return authProvider;
-    // }
 
     /**
      * AuthenticationManager es el componente central de autenticación en Spring Security.
@@ -80,21 +74,12 @@ public class SecurityConfig {
 
     // Configura las reglas de seguridad para las diferentes rutas de la API
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // http
-        //         .csrf(csrf -> csrf.disable())
-        //         .authorizeHttpRequests(auth -> auth
-        //                 // .requestMatchers("/api/productos/**").permitAll()
-        //                 .requestMatchers("/api/auth/**").permitAll()
-        //                 .anyRequest().authenticated());
-
-        // return http.build();
-
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         // Rutas públicas que no requieren autenticación
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/publicaciones/**").permitAll()
@@ -106,7 +91,8 @@ public class SecurityConfig {
                         // Rutas del carrito - permitir sin autenticación para carritos temporales
                         .requestMatchers("/api/carrito/**").permitAll()
 
-                        // Rutas que requieren autenticación para modificar productos
+                        // Rutas que requieren autenticación
+                        .requestMatchers("/api/auth/me").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/products").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/products/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/products/**").authenticated()
@@ -118,9 +104,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/pedidos/**").authenticated()
 
                         // Cualquier otra ruta requiere autenticación
-                        // con esta linea abarca requiere que todos los endpoints esten autenticados
-                        // no seía necesario post, put, delete /api/productos , api/pedidos
-                        .anyRequest().authenticated());
+                        .anyRequest().authenticated())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
