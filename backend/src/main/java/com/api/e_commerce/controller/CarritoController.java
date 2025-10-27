@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.e_commerce.dto.AgregarCarritoDTO;
 import com.api.e_commerce.dto.CarritoDTO;
-import com.api.e_commerce.service.CarritoService;
 import com.api.e_commerce.dto.CarritoTotalResponse;
+import com.api.e_commerce.service.CarritoService;
 
 @RestController
 @RequestMapping("/api/carrito") // localhost:8080/api/carrito
@@ -30,23 +30,15 @@ public class CarritoController {
     @PostMapping("/procesar")
     public ResponseEntity<CarritoTotalResponse> procesarCarrito(@RequestParam(value = "usuarioId", required = false) Long usuarioId,
                                                                @RequestParam(value = "sessionId", required = false) String sessionId) {
-        try {
-            CarritoTotalResponse response = carritoService.procesarCarrito(usuarioId, sessionId);
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new CarritoTotalResponse(0.0, e.getMessage()));
-        }
+        CarritoTotalResponse response = carritoService.procesarCarrito(usuarioId, sessionId);
+        return ResponseEntity.ok(response);
     }
 
     // POST /api/carrito/agregar - Agregar producto al carrito
     @PostMapping("/agregar")
     public ResponseEntity<CarritoDTO> agregarProducto(@RequestBody AgregarCarritoDTO request) {
-        try {
-            CarritoDTO response = carritoService.agregarProducto(request);
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        CarritoDTO response = carritoService.agregarProducto(request);
+        return ResponseEntity.ok(response);
     }
 
     // GET /api/carrito - Mostrar todos los ítems del carrito
@@ -55,21 +47,15 @@ public class CarritoController {
     public ResponseEntity<List<CarritoDTO>> obtenerCarrito(
             @RequestParam(value = "sessionId", required = false) String sessionId,
             @RequestParam(value = "usuarioId", required = false) Long usuarioId) {
-        try {
-            List<CarritoDTO> carrito;
-            
-            if (usuarioId != null) {
-                carrito = carritoService.obtenerCarritoPorUsuario(usuarioId);
-            } else if (sessionId != null) {
-                carrito = carritoService.obtenerCarritoPorSession(sessionId);
-            } else {
-                return ResponseEntity.badRequest().build();
-            }
-            
-            return ResponseEntity.ok(carrito);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+        List<CarritoDTO> carrito;
+        if (usuarioId != null) {
+            carrito = carritoService.obtenerCarritoPorUsuario(usuarioId);
+        } else if (sessionId != null) {
+            carrito = carritoService.obtenerCarritoPorSession(sessionId);
+        } else {
+            throw new IllegalArgumentException("Debe proporcionar usuarioId o sessionId");
         }
+        return ResponseEntity.ok(carrito);
     }
 
     // DELETE /api/carrito/eliminar/{productoId} - Eliminar producto del carrito
@@ -78,19 +64,14 @@ public class CarritoController {
             @PathVariable Long productoId,
             @RequestParam(value = "sessionId", required = false) String sessionId,
             @RequestParam(value = "usuarioId", required = false) Long usuarioId) {
-        try {
-            if (usuarioId != null) {
-                carritoService.eliminarProductoPorUsuario(usuarioId, productoId);
-            } else if (sessionId != null) {
-                carritoService.eliminarProductoPorSession(sessionId, productoId);
-            } else {
-                return ResponseEntity.badRequest().build();
-            }
-            
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+        if (usuarioId != null) {
+            carritoService.eliminarProductoPorUsuario(usuarioId, productoId);
+        } else if (sessionId != null) {
+            carritoService.eliminarProductoPorSession(sessionId, productoId);
+        } else {
+            throw new IllegalArgumentException("Se requiere sessionId o usuarioId");
         }
+        return ResponseEntity.ok().build();
     }
 
     // DELETE /api/carrito/vaciar - Vaciar el carrito completo
@@ -98,18 +79,13 @@ public class CarritoController {
     public ResponseEntity<Void> vaciarCarrito(
             @RequestParam(value = "sessionId", required = false) String sessionId,
             @RequestParam(value = "usuarioId", required = false) Long usuarioId) {
-        try {
-            if (usuarioId != null) {
-                carritoService.vaciarCarritoPorUsuario(usuarioId);
-            } else if (sessionId != null) {
-                carritoService.vaciarCarritoPorSession(sessionId);
-            } else {
-                return ResponseEntity.badRequest().build();
-            }
-            
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+        if (usuarioId != null) {
+            carritoService.vaciarCarritoPorUsuario(usuarioId);
+        } else if (sessionId != null) {
+            carritoService.vaciarCarritoPorSession(sessionId);
+        } else {
+            throw new IllegalArgumentException("Se requiere sessionId o usuarioId");
         }
+        return ResponseEntity.ok().build();
     }
 }
