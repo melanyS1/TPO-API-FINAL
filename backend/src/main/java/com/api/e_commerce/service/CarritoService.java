@@ -26,6 +26,7 @@ public class CarritoService {
     public com.api.e_commerce.dto.CarritoTotalResponse procesarCarrito(Long usuarioId, String sessionId) {
         java.util.List<ItemCarrito> items;
         if (usuarioId != null) {
+            // Si tenemos ambos (usuario y session) y ya se hizo un merge previo, procesamos el carrito del usuario
             items = carritoRepository.findByUsuarioId(usuarioId);
         } else if (sessionId != null && !sessionId.trim().isEmpty()) {
             items = carritoRepository.findBySessionId(sessionId);
@@ -57,6 +58,40 @@ public class CarritoService {
         }
 
         return new com.api.e_commerce.dto.CarritoTotalResponse(total, "Compra realizada con éxito");
+    }
+
+    // Mergea el carrito temporal (sessionId) dentro del carrito del usuario autenticado
+    @Transactional
+    public void mergearCarritoDeSessionAUsuario(Long usuarioId, String sessionId) {
+        if (usuarioId == null || sessionId == null || sessionId.trim().isEmpty()) {
+            return;
+        }
+
+        List<ItemCarrito> guestItems = carritoRepository.findBySessionId(sessionId);
+        if (guestItems == null || guestItems.isEmpty()) {
+            return;
+        }
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado para merge del carrito"));
+
+        for (ItemCarrito guestItem : guestItems) {
+            Long productoId = guestItem.getProducto().getId();
+            Optional<ItemCarrito> existingUserItem = carritoRepository.findByUsuarioIdAndProductoId(usuarioId, productoId);
+
+            if (existingUserItem.isPresent()) {
+                ItemCarrito userItem = existingUserItem.get();
+                int nuevaCantidad = userItem.getCantidad() + guestItem.getCantidad();
+                userItem.setCantidad(nuevaCantidad);
+                carritoRepository.save(userItem);
+            } else {
+                ItemCarrito nuevo = new ItemCarrito(guestItem.getProducto(), guestItem.getCantidad(), usuario);
+                carritoRepository.save(nuevo);
+            }
+        }
+
+        // Limpiar carrito temporal
+        carritoRepository.deleteBySessionId(sessionId);
     }
 
     @Autowired
