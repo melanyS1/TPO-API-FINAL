@@ -53,7 +53,8 @@ INSERT INTO `products` (`id`, `name`, `price`, `stock`, `description`, `image`, 
 (14, 'Samsung Galaxy Tab S9 Ultra', 1199.99, 7, 'Samsung Galaxy Tab S9 Ultra, 14.6 pulgadas, Snapdragon 8 Gen 2, 12GB RAM, S Pen', 'https://http2.mlstatic.com/D_NQ_NP_2X_764083-MLA92036709199_092025-F.webp', 2147483647, 0),
 (15, 'Macbook Air 13\'M3', 12, 5, 'Macbook Air 13\'M3 16GB RAM 256GB SSD - Space Grey', 'https://ipowerresale.com/cdn/shop/files/media_2872d38b-74f9-44d4-bf51-7773372242ed.png?v=1737158578', 1, 0),
 (16, 'Parlante Portatil JBL GO 4 Camuflado', 86.99, 14, 'JBL GO 4 Camuflado ofrece un sonido natural, con gran claridad y precisión.', 'https://http2.mlstatic.com/D_NQ_NP_2X_968112-MLA88370160853_072025-F.webp', 2, 0),
-(17, 'S25 Ultra Samsung', 899.99, 7, 'Samsung Galaxy S25 Ultra tiene pantalla AMOLED de 6,9\', 'https://http2.mlstatic.com/D_NQ_NP_2X_709755-MLA81772348094_012025-F.webp', 2147483647, 0);
+(17, 'S25 Ultra Samsung', 899.99, 7, 'Samsung Galaxy S25 Ultra tiene pantalla AMOLED de 6,9\' 120GHz.', 'https://http2.mlstatic.com/D_NQ_NP_2X_709755-MLA81772348094_012025-F.webp', 2147483647, 0),
+(18, 'iPad Pro 11', 3780, 16, 'iPad Pro 11\' WiFi M4 256GB con Standard Glass - Space Black', 'https://cdn-ipoint.waugi.com.ar/28208-thickbox_default/ipad-pro-11-wifi-m4-256gb-con-standard-glass-space-black.jpg', 1, 0);
 -- --------------------------------------------------------
 
 --
