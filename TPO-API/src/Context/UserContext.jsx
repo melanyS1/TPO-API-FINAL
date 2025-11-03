@@ -12,10 +12,7 @@ export function UserProvider({ children }) {
   });
 
   const login = async (email, password) => {
-    try {
-      console.log('Attempting login for:', email);
-      console.log('Request payload:', { email, password });
-      
+    try {      
       const response = await fetch('http://localhost:8080/api/auth/login', {
         method: 'POST',
         headers: {
@@ -24,10 +21,7 @@ export function UserProvider({ children }) {
         body: JSON.stringify({ email, password })
       });
       
-      const responseText = await response.text();
-      console.log('Response status:', response.status);
-      console.log('Response body:', responseText);
-      
+      const responseText = await response.text();      
       if (!response.ok) {
         if (response.status === 400) {
           return { success: false, error: 'Email o contraseña incorrectos: ' + responseText };
@@ -57,7 +51,6 @@ export function UserProvider({ children }) {
       localStorage.setItem('user', JSON.stringify(userDetails));
       localStorage.setItem('token', token);
       localStorage.setItem('isAuthenticated', 'true');
-      console.log('Login successful for user:', userDetails.username);
       return { success: true };
     } catch (error) {
       console.error('Login error:', error);

@@ -38,8 +38,6 @@ function getProducts(categoryId = null) {
   const url = categoryId 
     ? `${baseUrl}/products/category/${categoryId}?_=${ts}`
     : `${baseUrl}/products?_=${ts}`;
-    
-  console.log('Fetching products from URL:', url);
   
   return fetch(url)
     .then((response) => {
@@ -49,7 +47,6 @@ function getProducts(categoryId = null) {
       return response.json();
     })
     .then((data) => {
-      console.log("Productos obtenidos:", data);
       // Filter by category if specified
       if (categoryId) {
         const filtered = data.filter(product => 
@@ -76,7 +73,6 @@ function getProductById(id) {
       return response.json();
     })
     .then(data => {
-      console.log("Producto obtenido:", data);
       return data;
     })
     .catch(error => {

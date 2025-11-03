@@ -10,7 +10,6 @@ const ProductCatalog = () => {
     const searchTerm = searchParams.get('search') || '';
     // Extract the actual category ID from the URL parameter
     const actualCategoryId = categoryId ? categoryId.replace('category/', '') : null;
-    console.log('Category ID from URL:', categoryId, 'Actual category ID:', actualCategoryId);
     const products = useGetProducts(searchTerm, actualCategoryId);
     const [isLoading, setIsLoading] = React.useState(true);
 
