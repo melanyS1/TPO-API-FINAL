@@ -1,29 +1,25 @@
 import { getProducts } from "../services/product-api";
+import { useRefresh } from "../Context/RefreshContext";
 import { useState, useEffect } from "react";
 
 function useGetProducts(searchTerm = '', categoryId = null) {
   const [products, setProducts] = useState([]);
+  const { productsVersion } = useRefresh();
 
   useEffect(() => {
-    getProducts().then((data) => {
+    getProducts(categoryId).then((data) => {
       let filtered = [...data];
-      
-      // Filtrar por categoría si se especifica
-      if (categoryId) {
-        filtered = filtered.filter(product => product.categoryId === categoryId);
-      }
 
-      // Filtrar por término de búsqueda si se especifica
+      // Apply search filter if specified
       if (searchTerm) {
         filtered = filtered.filter(product => 
           product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          product.description.toLowerCase().includes(searchTerm.toLowerCase())
+          product.description?.toLowerCase().includes(searchTerm.toLowerCase())
         );
       }
-
       setProducts(filtered);
     });
-  }, [searchTerm, categoryId]);
+  }, [searchTerm, categoryId, productsVersion]);
 
   return products;
 }

@@ -11,12 +11,14 @@ import ThankYouPage from "./pages/ThankYouPage/ThankYouPage";
 import Products from "./pages/Products/Products";
 import MisProductos from "./pages/MisProductos/misProductos";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { RefreshProvider } from "./Context/RefreshContext";
 
 function App() {
   return (
-    <UserProvider>
-      <CartProvider>
-        <Router>
+    <RefreshProvider>
+      <UserProvider>
+        <CartProvider>
+          <Router>
           <Header />
           <main className="container">
             <Routes>
@@ -42,9 +44,10 @@ function App() {
               <Route path="/cart" element={<Cart />} />
             </Routes>
           </main>
-        </Router>
-      </CartProvider>
-    </UserProvider>
+          </Router>
+        </CartProvider>
+      </UserProvider>
+    </RefreshProvider>
   );
 }
 

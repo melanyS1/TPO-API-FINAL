@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../Context/UserContext';
-import './MisProductos.css';
+import './misProductos.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('No hay sesión activa. Por favor, inicia sesión.');
+  }
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  };
+};
 
 const MisProductos = () => {
     
@@ -14,6 +25,24 @@ const MisProductos = () => {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState({ name: '', price: '', stock: '', description: '', image: '', categoryId: '' });
   const [showCreate, setShowCreate] = useState(false);
+  const [categories, setCategories] = useState([]);
+
+  // Fetch categories when component mounts
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(`${API_URL}/categories`);
+        if (res.ok) {
+          const data = await res.json();
+          setCategories(data);
+        }
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+      }
+    };
+    
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     if (!user) {
@@ -27,12 +56,18 @@ const MisProductos = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/products`);
-      const data = await res.json();
-      // filtrar por sellerId que coincida con el id del usuario
+      const headers = getAuthHeaders();
       const sellerId = user?.id ?? user?.userId ?? user?.uid ?? user?.username;
-      const myProducts = data.filter(p => String(p.sellerId) === String(sellerId));
-      setProducts(myProducts);
+      if (!sellerId) {
+        console.error('No se pudo determinar el ID del vendedor');
+        return;
+      }
+      const res = await fetch(`${API_URL}/products?sellerId=${sellerId}`, { headers });
+      if (!res.ok) {
+        throw new Error(`Error al obtener productos: ${res.status}`);
+      }
+      const data = await res.json();
+      setProducts(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching products', err);
     } finally {
@@ -43,25 +78,20 @@ const MisProductos = () => {
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   // manejar selección/arrastre de archivo y convertir a data URL para preview
-  const handleFileChange = (file) => {
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => setForm(prev => ({ ...prev, image: reader.result }));
-    reader.readAsDataURL(file);
+  const validateImageUrl = (url) => {
+    if (!url) return true; // Empty URL is ok
+    return url.startsWith('http://') || url.startsWith('https://');
   };
-
-  const onDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files && e.dataTransfer.files[0];
-    if (file) handleFileChange(file);
-  };
-
-  const onDragOver = (e) => e.preventDefault();
 
   const handleDelete = async (id) => {
     if (!confirm('¿Eliminar producto?')) return;
     try {
-      await fetch(`${API_URL}/products/${id}`, { method: 'DELETE' });
+      const headers = getAuthHeaders();
+      const res = await fetch(`${API_URL}/publicaciones/${id}`, { method: 'DELETE', headers });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || `Error al eliminar (${res.status})`);
+      }
       // actualizar la lista llamando a fetchProducts para mantener consistencia
       await fetchProducts();
       // hacer scroll al listado
@@ -74,7 +104,18 @@ const MisProductos = () => {
 
   const startEdit = (product) => {
     setEditingId(product.id);
-    setForm({ name: product.name, price: product.price, stock: product.stock, description: product.description, image: product.image, categoryId: product.categoryId });
+    // Tomar el primer id de categoría si existe en el arreglo de categorías del producto
+    const currentCategoryId = Array.isArray(product.categories) && product.categories.length > 0
+      ? product.categories[0]?.id ?? ''
+      : '';
+    setForm({ 
+      name: product.name, 
+      price: product.price, 
+      stock: product.stock, 
+      description: product.description, 
+      image: product.image, 
+      categoryId: String(currentCategoryId)
+    });
     setShowCreate(false);
   };
 
@@ -88,19 +129,41 @@ const MisProductos = () => {
       // Buscar el producto original en la lista
       const original = products.find(p => String(p.id) === String(id));
       if (!original) throw new Error('Producto original no encontrado');
-      // Combinar los datos originales con los nuevos
-      const body = {
-        ...original,
-        ...form,
-        price: parseFloat(form.price),
-        stock: Number(form.stock)
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No hay sesión activa. Por favor, inicia sesión.');
+      }
+
+      // Construir el body según PublicacionRequest del backend
+      const bodyBase = {
+        name: form.name || original.name,
+        price: parseFloat(form.price || original.price || '0'),
+        stock: Number(form.stock || original.stock || '0'),
+        description: form.description || original.description,
+        image: form.image || original.image,
+        // Mantener featured si viene del backend, por defecto false
+        featured: Boolean(original.featured) || false
       };
-      const res = await fetch(`${API_URL}/products/${id}`, {
+
+      // Si el usuario seleccionó una categoría, enviarla como array de IDs
+      // Caso contrario, no incluir "categories" para que el backend no las modifique
+      const body = form.categoryId
+        ? { ...bodyBase, categories: [ Number(form.categoryId) ] }
+        : bodyBase;
+
+      const headers = getAuthHeaders();
+      const res = await fetch(`${API_URL}/publicaciones/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(body)
       });
-      if (!res.ok) throw new Error('No se pudo actualizar');
+
+      if (!res.ok) {
+        const errorData = await res.text();
+        throw new Error(`Error al actualizar: ${res.status} ${errorData}`);
+      }
+
       // refrescar lista
       await fetchProducts();
       cancelEdit();
@@ -114,16 +177,38 @@ const MisProductos = () => {
 
   const createProduct = async () => {
     try {
-      // validaciones simples
+      // validaciones
       if (!form.name || !form.price) {
         alert('Completá al menos nombre y precio.');
         return;
       }
+      
+      if (form.image && !validateImageUrl(form.image)) {
+        alert('La URL de la imagen debe comenzar con http:// o https://');
+        return;
+      }
 
-      const sellerId = user?.id ?? user?.userId ?? user?.uid ?? user?.username ?? 0;
+      const sellerId = user?.id ?? user?.userId ?? user?.uid ?? user?.username;
+      if (!sellerId) {
+        throw new Error('No se pudo determinar el ID del vendedor');
+      }
       const body = { ...form, price: parseFloat(form.price), stock: Number(form.stock), sellerId };
 
-      const res = await fetch(`${API_URL}/products`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No hay sesión activa. Por favor, inicia sesión.');
+      }
+
+      const headers = getAuthHeaders();
+      const res = await fetch(`${API_URL}/publicaciones`, { 
+        method: 'POST', 
+        headers,
+        body: JSON.stringify({
+          ...body,
+          categories: body.categoryId ? [body.categoryId] : [], // Convert categoryId to categories array
+          featured: false // Add default value for featured field
+        }) 
+      });
 
       if (res.ok) {
         const created = await res.json();
@@ -181,19 +266,34 @@ const MisProductos = () => {
             <input name="name" placeholder="Nombre" value={form.name} onChange={handleChange} />
             <input name="price" placeholder="Precio" value={form.price} onChange={handleChange} />
             <input name="stock" placeholder="Stock" value={form.stock} onChange={handleChange} />
-            <input name="categoryId" placeholder="Category ID" value={form.categoryId} onChange={handleChange} />
-            {/* Area de subida de imágenes */}
-            <div className="upload-area" onDrop={onDrop} onDragOver={onDragOver}>
-              {form.image ? (
-                <img className="upload-preview" src={form.image} alt="preview" />
-              ) : (
-                <div className="upload-placeholder">
-                  <p><strong>Seleccionar o arrastrar los archivos aquí</strong></p>
-                  <small>Subí tu imagen en JPG, JPEG, PNG o WEBP, con resolución mínima de 500px y hasta 10 MB.</small>
-                </div>
-              )}
-              <input type="file" accept="image/*" onChange={(e) => handleFileChange(e.target.files[0])} />
-            </div>
+            <select 
+              name="categoryId" 
+              value={form.categoryId} 
+              onChange={handleChange}
+              className="form-select"
+            >
+              <option value="">Selecciona una categoría</option>
+              {categories.map(category => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            {/* Campo para URL de imagen */}
+            <input 
+              name="image" 
+              placeholder="URL de la imagen (http:// o https://)" 
+              value={form.image} 
+              onChange={handleChange}
+            />
+            {form.image && (
+              <img 
+                className="upload-preview" 
+                src={form.image} 
+                alt="preview" 
+                style={{ maxWidth: '200px', marginTop: '10px' }}
+              />
+            )}
             <textarea name="description" placeholder="Descripción" value={form.description} onChange={handleChange} />
             <button onClick={createProduct}>Crear</button>
           </div>
@@ -206,22 +306,37 @@ const MisProductos = () => {
               <div key={p.id} className="product-item">
                 {editingId === p.id ? (
                   <div className="product-form">
-                    <input name="name" value={form.name} onChange={handleChange} />
-                    <input name="price" value={form.price} onChange={handleChange} />
-                    <input name="stock" value={form.stock} onChange={handleChange} />
-                    <input name="categoryId" value={form.categoryId} onChange={handleChange} />
-                    {/* reemplazo del input de imagen por área de upload en modo edición */}
-                    <div className="upload-area" onDrop={onDrop} onDragOver={onDragOver}>
-                      {form.image ? (
-                        <img className="upload-preview" src={form.image} alt="preview" />
-                      ) : (
-                        <div className="upload-placeholder">
-                          <p><strong>Seleccionar o arrastrar los archivos aquí</strong></p>
-                          <small>Subí tu imagen en JPG, JPEG, PNG o WEBP, con resolución mínima de 500px y hasta 10 MB.</small>
-                        </div>
-                      )}
-                      <input type="file" accept="image/*" onChange={(e) => handleFileChange(e.target.files[0])} />
-                    </div>
+                    <input name="name" placeholder="Nombre" value={form.name} onChange={handleChange} />
+                    <input name="price" placeholder="Precio" value={form.price} onChange={handleChange} />
+                    <input name="stock" placeholder="Stock" value={form.stock} onChange={handleChange} />
+                    <select 
+                      name="categoryId" 
+                      value={form.categoryId} 
+                      onChange={handleChange}
+                      className="form-select"
+                    >
+                      <option value="">Selecciona una categoría</option>
+                      {categories.map(category => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                    {/* Campo para URL de imagen en modo edición */}
+                    <input 
+                      name="image" 
+                      placeholder="URL de la imagen (http:// o https://)" 
+                      value={form.image} 
+                      onChange={handleChange}
+                    />
+                    {form.image && (
+                      <img 
+                        className="upload-preview" 
+                        src={form.image} 
+                        alt="preview" 
+                        style={{ maxWidth: '200px', marginTop: '10px' }}
+                      />
+                    )}
                     <textarea name="description" value={form.description} onChange={handleChange} />
                     <button onClick={() => saveEdit(p.id)}>Guardar</button>
                     <button onClick={cancelEdit}>Cancelar</button>

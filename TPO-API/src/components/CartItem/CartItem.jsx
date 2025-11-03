@@ -2,7 +2,7 @@ import "./CartItem.css";
 import { Link } from "react-router-dom";
 import QtyControls from "../QtyControls/QtyControls";
 
-function CartItem({ item, addToCart, removeFromCart }) {
+function CartItem({ item, addToCart, decreaseQty, removeFromCart }) {
   return (
       <li className="cart-item" key={item.id}>
         <div className="item-title">
@@ -40,7 +40,7 @@ function CartItem({ item, addToCart, removeFromCart }) {
                 addToCart(item, 1);
               }}
               onDecrease={() => {
-                addToCart(item, -1);
+                decreaseQty(item);
               }}
             />
             <div className="item-subtotal">

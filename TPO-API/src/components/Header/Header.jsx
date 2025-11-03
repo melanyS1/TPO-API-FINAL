@@ -7,6 +7,7 @@ import { useCart } from "../../Context/CartContext";
 import { useUser } from "../../Context/UserContext";
 import useGetProducts from "../../hooks/useGetProducts";
 import "./Header.css";
+import { apiUrl } from "../../services/config";
 
 const Header = () => {
   const { showCartPopOver, setShowCartPopOver } = useCart();
@@ -22,10 +23,18 @@ const Header = () => {
   const products = useGetProducts(searchTerm);
 
   useEffect(() => {
-    fetch('http://localhost:3001/categories')
-      .then(response => response.json())
-      .then(data => setCategories(data))
-      .catch(error => console.error('Error loading categories:', error));
+    fetch(apiUrl('/categories'))
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => setCategories(data || []))
+      .catch(error => {
+        console.error('Error loading categories:', error);
+        setCategories([]);
+      });
   }, []);
   
 

@@ -7,7 +7,7 @@ function useSearchProducts() {
 
     useEffect(() => {
         // Cargar productos desde la API
-        fetch("http://localhost:3001/products")
+        fetch("http://localhost:8080/api/products")
             .then((response) => response.json())
             .then((data) => {
                 setProducts(data);

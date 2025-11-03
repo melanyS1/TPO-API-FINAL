@@ -1,8 +1,35 @@
 
+-- Drop tables in reverse order of dependencies
+DROP TABLE IF EXISTS `products_categories`;
+DROP TABLE IF EXISTS `items_carrito`;
+DROP TABLE IF EXISTS `products`;
 DROP TABLE IF EXISTS `categories`;
+DROP TABLE IF EXISTS `users`;
+
+-- Create users table first since it's referenced by products
+CREATE TABLE `users` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` enum('ADMIN','USER') DEFAULT 'USER',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_username` (`username`),
+  UNIQUE KEY `UK_email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`) VALUES
+(1, 'juan123', 'juan@example.com', '$2a$10$.QYKWz.lZFTn7D3l89PWrOkz8hyHD42OIuAvMMhiOj/UNsSpNlZy6', 'USER'),
+(2, 'maria456', 'maria@example.com', '$2a$10$.QYKWz.lZFTn7D3l89PWrOkz8hyHD42OIuAvMMhiOj/UNsSpNlZy6', 'USER'),
+(2147483647, 'Gabriela', 'gaby@ejemplo.com', '$2a$10$.QYKWz.lZFTn7D3l89PWrOkz8hyHD42OIuAvMMhiOj/UNsSpNlZy6', 'USER');
+
+-- --------------------------------------------------------
+-- Then create categories
 CREATE TABLE `categories` (
-  `id` bigint(20) NOT NULL,
-  `name` varchar(255) DEFAULT NULL
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -17,25 +44,25 @@ INSERT INTO `categories` (`id`, `name`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `products`
---
-
-DROP TABLE IF EXISTS `products`;
+-- Create products table
 CREATE TABLE `products` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `price` double NOT NULL,
   `stock` int(11) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
   `sellerId` bigint(50) DEFAULT NULL,
-  `featured` tinyint(1) DEFAULT NULL
+  `featured` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sellerId` (`sellerId`),
+  CONSTRAINT `products_ibfk_2` FOREIGN KEY (`sellerId`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `products`
 --
+
 
 INSERT INTO `products` (`id`, `name`, `price`, `stock`, `description`, `image`, `sellerId`, `featured`) VALUES
 (1, 'Mini Proyector Elephas', 50.45, 4, '2020 Mini Proyector de Película, 5000 LUX Full HD 1080P, compatible con USB/HDMI/VGA/Computadora/Portátil/iPhone/TV Stick/Tarjeta TF.', 'https://m.media-amazon.com/images/I/51CnRBSVnrL._AC_SL1500_.jpg', 1, 1),
@@ -57,14 +84,14 @@ INSERT INTO `products` (`id`, `name`, `price`, `stock`, `description`, `image`, 
 (18, 'iPad Pro 11', 3780, 16, 'iPad Pro 11\' WiFi M4 256GB con Standard Glass - Space Black', 'https://cdn-ipoint.waugi.com.ar/28208-thickbox_default/ipad-pro-11-wifi-m4-256gb-con-standard-glass-space-black.jpg', 1, 0);
 -- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `products_categories`
---
-
-DROP TABLE IF EXISTS `products_categories`;
+-- Create products_categories table
 CREATE TABLE `products_categories` (
   `productId` bigint(20) NOT NULL,
-  `categoryId` bigint(20) NOT NULL
+  `categoryId` bigint(20) NOT NULL,
+  PRIMARY KEY (`productId`, `categoryId`),
+  KEY `FKg37gcrv9n55qu10axwkl8ruyw` (`categoryId`),
+  CONSTRAINT `FKg37gcrv9n55qu10axwkl8ruyw` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`id`),
+  CONSTRAINT `FKkaswq49cqw38u8tguh6tsm6qf` FOREIGN KEY (`productId`) REFERENCES `products` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -93,136 +120,25 @@ INSERT INTO `products_categories` (`productId`, `categoryId`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `users`
---
-
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
-  `id` bigint(20) NOT NULL,
-  `username` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `role` enum('ADMIN','USER') DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `users`
---
-
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`) VALUES
-(1, 'juan123', 'juan@example.com', '123', NULL),
-(2, 'maria456', 'maria@example.com', '123', NULL),
-(2147483647, 'Gabriela', 'gaby@ejemplo.com', '123', NULL);
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `items_carrito`
 --
-
-DROP TABLE IF EXISTS `items_carrito`;
 CREATE TABLE `items_carrito` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `productoId` bigint(20) NOT NULL,
   `usuarioId` bigint(20) DEFAULT NULL,
   `sessionId` varchar(255) DEFAULT NULL,
-  `cantidad` int(11) NOT NULL
+  `cantidad` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_carrito_productoId` (`productoId`),
+  KEY `FK_carrito_usuarioId` (`usuarioId`),
+  KEY `idx_sessionId` (`sessionId`),
+  CONSTRAINT `FK_carrito_productoId` FOREIGN KEY (`productoId`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_carrito_usuarioId` FOREIGN KEY (`usuarioId`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Índices para tablas volcadas
 --
 
---
--- Indices de la tabla `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `products`
---
-ALTER TABLE `products`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `sellerId` (`sellerId`);
-
---
--- Indices de la tabla `products_categories`
---
-ALTER TABLE `products_categories`
-  ADD KEY `FKg37gcrv9n55qu10axwkl8ruyw` (`categoryId`),
-  ADD KEY `FKkaswq49cqw38u8tguh6tsm6qf` (`productId`);
-
---
--- Indices de la tabla `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `items_carrito`
---
-ALTER TABLE `items_carrito`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `FK_carrito_productoId` (`productoId`),
-  ADD KEY `FK_carrito_usuarioId` (`usuarioId`),
-  ADD KEY `idx_sessionId` (`sessionId`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `categories`
---
-ALTER TABLE `categories`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT de la tabla `products`
---
-ALTER TABLE `products`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
-
---
--- AUTO_INCREMENT de la tabla `users`
---
-ALTER TABLE `users`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2147483648;
-
---
--- AUTO_INCREMENT de la tabla `items_carrito`
---
-ALTER TABLE `items_carrito`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `products`
---
-ALTER TABLE `products`
-  ADD CONSTRAINT `products_ibfk_2` FOREIGN KEY (`sellerId`) REFERENCES `users` (`id`);
-
---
--- Filtros para la tabla `products_categories`
---
-ALTER TABLE `products_categories`
-  ADD CONSTRAINT `FKg37gcrv9n55qu10axwkl8ruyw` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`id`),
-  ADD CONSTRAINT `FKkaswq49cqw38u8tguh6tsm6qf` FOREIGN KEY (`productId`) REFERENCES `products` (`id`);
-
---
--- Filtros para la tabla `items_carrito`
---
-ALTER TABLE `items_carrito`
-  ADD CONSTRAINT `FK_carrito_productoId` FOREIGN KEY (`productoId`) REFERENCES `products` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_carrito_usuarioId` FOREIGN KEY (`usuarioId`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+-- No separate ALTER statements needed since constraints are defined in CREATE TABLE
 COMMIT;
-
-
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

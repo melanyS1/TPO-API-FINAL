@@ -8,7 +8,9 @@ const ProductCatalog = () => {
     const [searchParams] = useSearchParams();
     const { categoryId } = useParams();
     const searchTerm = searchParams.get('search') || '';
-    const products = useGetProducts(searchTerm, categoryId);
+    // Extract the actual category ID from the URL parameter
+    const actualCategoryId = categoryId ? categoryId.replace('category/', '') : null;
+    const products = useGetProducts(searchTerm, actualCategoryId);
     const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {

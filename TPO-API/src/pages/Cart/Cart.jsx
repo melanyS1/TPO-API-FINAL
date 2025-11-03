@@ -1,7 +1,8 @@
 import { useCart } from "../../Context/CartContext";
 import { useNavigate } from "react-router-dom";
 import "./CartItems.css";
-import { purchaseCart, verifyStock } from "../../services/product-api";
+import { processCheckout, verifyStock, getSessionId } from "../../services/product-api";
+import { useRefresh } from "../../Context/RefreshContext";
 import CartSummary from "../../components/CartSummary/CartSummary";
 import { useEffect, useState } from "react";
 import CartItem from "../../components/CartItem/CartItem";
@@ -11,9 +12,11 @@ import { useUser } from "../../Context/UserContext";
 function Cart() {
   const navigate = useNavigate();
   const { isAuthenticated } = useUser();
+  const { bumpProductsVersion } = useRefresh();
   const {
     cart,
     addToCart,
+    decreaseQty,
     removeFromCart,
     totalItems,
     clearCart,
@@ -37,6 +40,7 @@ function Cart() {
                 key={item.id}
                 item={item}
                 addToCart={addToCart}
+                decreaseQty={decreaseQty}
                 removeFromCart={removeFromCart}
               />
             ))}
@@ -48,21 +52,27 @@ function Cart() {
         <CartSummary
           totalItems={totalItems}
           cart={cart}
-          onCheckout={() => {
+          onCheckout={async () => {
             if (!isAuthenticated) {
               setShowLoginMsg(true);
               return;
             }
-            verifyStock(cart).then((isStockSufficient) => {
+            try {
+              // Verificación opcional de stock en frontend
+              const isStockSufficient = await verifyStock(cart);
               if (!isStockSufficient) {
                 alert("Stock insuficiente");
                 return;
-              } else {
-                navigate("/thank-you");
-                purchaseCart(cart);
-                clearCart();
               }
-            });
+              // Procesar compra en backend (descuenta stock y vacía carrito en servidor)
+              const sessionId = localStorage.getItem('sessionId') || getSessionId();
+              await processCheckout(sessionId);
+              bumpProductsVersion();
+              clearCart();
+              navigate("/thank-you");
+            } catch (e) {
+              alert(e?.message || "Error al procesar la compra");
+            }
           }}
         />
         <div className="cart-login-message">

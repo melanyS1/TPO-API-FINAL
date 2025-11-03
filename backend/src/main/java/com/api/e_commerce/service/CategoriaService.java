@@ -23,4 +23,10 @@ public class CategoriaService {
                 .map(c -> new CategoryDTO(c.getId(), c.getName()))
                 .collect(Collectors.toList());
     }
+
+    public CategoryDTO getCategoriaById(Long id) {
+        return categoriaRepository.findById(id)
+                .map(c -> new CategoryDTO(c.getId(), c.getName()))
+                .orElse(null);
+    }
 }
