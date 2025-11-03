@@ -18,12 +18,13 @@ CREATE TABLE `users` (
   UNIQUE KEY `UK_email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Insert initial users
+
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`) VALUES
 (1, 'juan123', 'juan@example.com', '$2a$10$.QYKWz.lZFTn7D3l89PWrOkz8hyHD42OIuAvMMhiOj/UNsSpNlZy6', 'USER'),
 (2, 'maria456', 'maria@example.com', '$2a$10$.QYKWz.lZFTn7D3l89PWrOkz8hyHD42OIuAvMMhiOj/UNsSpNlZy6', 'USER'),
-(3, 'gaby789', 'gaby@example.com', '$2a$10$.QYKWz.lZFTn7D3l89PWrOkz8hyHD42OIuAvMMhiOj/UNsSpNlZy6', 'USER');
+(2147483647, 'Gabriela', 'gaby@ejemplo.com', '$2a$10$.QYKWz.lZFTn7D3l89PWrOkz8hyHD42OIuAvMMhiOj/UNsSpNlZy6', 'USER');
 
+-- --------------------------------------------------------
 -- Then create categories
 CREATE TABLE `categories` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -62,23 +63,24 @@ CREATE TABLE `products` (
 -- Volcado de datos para la tabla `products`
 --
 
+
 INSERT INTO `products` (`id`, `name`, `price`, `stock`, `description`, `image`, `sellerId`, `featured`) VALUES
 (1, 'Mini Proyector Elephas', 50.45, 4, '2020 Mini Proyector de Película, 5000 LUX Full HD 1080P, compatible con USB/HDMI/VGA/Computadora/Portátil/iPhone/TV Stick/Tarjeta TF.', 'https://m.media-amazon.com/images/I/51CnRBSVnrL._AC_SL1500_.jpg', 1, 1),
 (2, 'Proyector portátil YG300', 48.42, 9, 'Mini proyector de 7500 lúmenes para películas al aire libre, hasta 170 pulgadas.', 'https://sistema.langtecnologia.com.ar/img/qloud/2572/8140_1.jpg', 2, 1),
-(3, 'Proyector WiFi Bluetooth 5.1', 65.99, 5, 'Proyector portátil con soporte 4K, altavoz base de sonido, compatible con HDMI y USB.', 'https://m.media-amazon.com/images/I/51AQ01HrQPL._AC_SL1200_.jpg', 3, 1),
+(3, 'Proyector WiFi Bluetooth 5.1', 65.99, 5, 'Proyector portátil con soporte 4K, altavoz base de sonido, compatible con HDMI y USB.', 'https://m.media-amazon.com/images/I/51AQ01HrQPL._AC_SL1200_.jpg', 2147483647, 1),
 (4, 'Proyector Cine para Exteriores', 139.99, 7, 'Proyector de cine portátil nativo 1080P, 15000 lúmenes, compatible con TV Stick.', 'https://www.el-pentagono.com.ar/mods/html/fil/Model/Product/1106/650dbf706e72c-proyector.png.webp', 2, 0),
 (6, 'Asus ROG Zephyrus G14', 1499.99, 6, 'Laptop gaming Asus ROG Zephyrus G14, AMD Ryzen 9, RTX 4060, 16GB RAM, 1TB SSD', 'https://rog.asus.com/media/1704422069620.jpg', 1, 1),
 (7, 'Motorola Edge 40', 599.99, 15, 'Motorola Edge 40 Pro 5G, 256GB, 12GB RAM, Pantalla pOLED 165Hz', 'https://http2.mlstatic.com/D_NQ_NP_2X_756726-MLA91961241747_092025-F.webp', 2, 0),
 (8, 'Sony WF-1000XM5', 299.99, 20, 'Auriculares TWS Sony WF-1000XM5 con cancelación de ruido y LDAC', 'https://http2.mlstatic.com/D_NQ_NP_2X_811234-MLA87124107828_072025-F.webp', 2, 0),
 (9, 'Lenovo Tab P11 Pro', 449.99, 10, 'Lenovo Tab P11 Pro Gen 2, 11.5 pulgadas OLED, 8GB RAM, 256GB', 'https://http2.mlstatic.com/D_NQ_NP_2X_725459-MLA90932261617_082025-F.webp', 1, 0),
 (10, 'Marshall Emberton II', 169.99, 18, 'Parlante Bluetooth Marshall Emberton II, 30h de batería, resistente al agua', 'https://http2.mlstatic.com/D_NQ_NP_2X_704126-MLA83892805401_042025-F.webp', 2, 0),
-(11, 'MSI Katana 15', 1299.99, 5, 'MSI Katana 15 Gaming Laptop, Intel i7 13th Gen, RTX 4060, 16GB RAM, RGB', 'https://http2.mlstatic.com/D_NQ_NP_2X_861585-MLU78452884498_082024-F.webp', 2, 0),
+(11, 'MSI Katana 15', 1299.99, 5, 'MSI Katana 15 Gaming Laptop, Intel i7 13th Gen, RTX 4060, 16GB RAM, RGB', 'https://http2.mlstatic.com/D_NQ_NP_2X_861585-MLU78452884498_082024-F.webp', 2147483647, 0),
 (12, 'Apple iPhone 13 (128 GB)', 450, 6, 'El iPhone 13 (128 GB), cámara dual de 12 MP con modo noche y grabación 4K.', 'https://http2.mlstatic.com/D_NQ_NP_2X_973345-MLA47781591382_102021-F.webp', 2, 1),
 (13, 'Samsung Galaxy Buds2 Pro', 199.99, 25, 'Samsung Galaxy Buds2 Pro con cancelación de ruido activa y audio 360', 'https://http2.mlstatic.com/D_NQ_NP_2X_978950-MLU76912399120_062024-F.webp', 1, 0),
-(14, 'Samsung Galaxy Tab S9 Ultra', 1199.99, 7, 'Samsung Galaxy Tab S9 Ultra, 14.6 pulgadas, Snapdragon 8 Gen 2, 12GB RAM, S Pen', 'https://http2.mlstatic.com/D_NQ_NP_2X_764083-MLA92036709199_092025-F.webp', 3, 0),
+(14, 'Samsung Galaxy Tab S9 Ultra', 1199.99, 7, 'Samsung Galaxy Tab S9 Ultra, 14.6 pulgadas, Snapdragon 8 Gen 2, 12GB RAM, S Pen', 'https://http2.mlstatic.com/D_NQ_NP_2X_764083-MLA92036709199_092025-F.webp', 2147483647, 0),
 (15, 'Macbook Air 13\'M3', 12, 5, 'Macbook Air 13\'M3 16GB RAM 256GB SSD - Space Grey', 'https://ipowerresale.com/cdn/shop/files/media_2872d38b-74f9-44d4-bf51-7773372242ed.png?v=1737158578', 1, 0),
 (16, 'Parlante Portatil JBL GO 4 Camuflado', 86.99, 14, 'JBL GO 4 Camuflado ofrece un sonido natural, con gran claridad y precisión.', 'https://http2.mlstatic.com/D_NQ_NP_2X_968112-MLA88370160853_072025-F.webp', 2, 0),
-(17, 'S25 Ultra Samsung', 899.99, 7, 'Samsung Galaxy S25 Ultra tiene pantalla AMOLED de 6,9\' 120GHz.', 'https://http2.mlstatic.com/D_NQ_NP_2X_709755-MLA81772348094_012025-F.webp', 2, 0),
+(17, 'S25 Ultra Samsung', 899.99, 7, 'Samsung Galaxy S25 Ultra tiene pantalla AMOLED de 6,9\' 120GHz.', 'https://http2.mlstatic.com/D_NQ_NP_2X_709755-MLA81772348094_012025-F.webp', 2147483647, 0),
 (18, 'iPad Pro 11', 3780, 16, 'iPad Pro 11\' WiFi M4 256GB con Standard Glass - Space Black', 'https://cdn-ipoint.waugi.com.ar/28208-thickbox_default/ipad-pro-11-wifi-m4-256gb-con-standard-glass-space-black.jpg', 1, 0);
 -- --------------------------------------------------------
 
