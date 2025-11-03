@@ -1,19 +1,19 @@
--- Initialize database and settings
+-- Inicializar base de datos
 CREATE DATABASE IF NOT EXISTS ecommerce_db;
 USE ecommerce_db;
 
--- Disable constraints for import
+-- desactivar constraints para evitar problemas de dependencias
 SET FOREIGN_KEY_CHECKS=0;
 SET UNIQUE_CHECKS=0;
 SET SQL_MODE='';
 
--- Set proper character encoding
+-- Configuraciones de codificación de caracteres
 SET NAMES utf8mb4;
 SET CHARACTER SET utf8mb4;
 
--- Source the main database schema and data
+-- Source base de datos principal y datos
 SOURCE /docker-entrypoint-initdb.d/db.sql;
 
--- Re-enable constraints
+-- Rehabilitar constraints
 SET FOREIGN_KEY_CHECKS=1;
 SET UNIQUE_CHECKS=1;
