@@ -1,0 +1,14 @@
+target/
+.mvn/
+.git/
+.gitignore
+Dockerfile
+**/node_modules
+**/.idea
+*.iml
+*.log
+/.settings
+/.classpath
+/.project
+/.vscode
+**/build
