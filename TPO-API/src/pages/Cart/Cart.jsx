@@ -16,6 +16,7 @@ function Cart() {
   const {
     cart,
     addToCart,
+    decreaseQty,
     removeFromCart,
     totalItems,
     clearCart,
@@ -39,6 +40,7 @@ function Cart() {
                 key={item.id}
                 item={item}
                 addToCart={addToCart}
+                decreaseQty={decreaseQty}
                 removeFromCart={removeFromCart}
               />
             ))}
