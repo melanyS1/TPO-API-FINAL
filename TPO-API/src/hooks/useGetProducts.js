@@ -1,8 +1,10 @@
 import { getProducts } from "../services/product-api";
+import { useRefresh } from "../Context/RefreshContext";
 import { useState, useEffect } from "react";
 
 function useGetProducts(searchTerm = '', categoryId = null) {
   const [products, setProducts] = useState([]);
+  const { productsVersion } = useRefresh();
 
   useEffect(() => {
     console.log('Fetching products with categoryId:', categoryId);
@@ -27,7 +29,7 @@ function useGetProducts(searchTerm = '', categoryId = null) {
       console.log('Filtered products:', filtered);
       setProducts(filtered);
     });
-  }, [searchTerm, categoryId]);
+  }, [searchTerm, categoryId, productsVersion]);
 
   return products;
 }
