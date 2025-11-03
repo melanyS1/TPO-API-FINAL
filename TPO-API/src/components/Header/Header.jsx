@@ -7,6 +7,7 @@ import { useCart } from "../../Context/CartContext";
 import { useUser } from "../../Context/UserContext";
 import useGetProducts from "../../hooks/useGetProducts";
 import "./Header.css";
+import { apiUrl } from "../../services/config";
 
 const Header = () => {
   const { showCartPopOver, setShowCartPopOver } = useCart();
@@ -22,7 +23,7 @@ const Header = () => {
   const products = useGetProducts(searchTerm);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/categories')
+    fetch(apiUrl('/categories'))
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

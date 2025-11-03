@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductCatalog from '../../components/ProductCatalog/ProductCatalog';
 import './Products.css';
+import { apiUrl } from '../../services/config';
 
 const Products = () => {
   const { categoryId } = useParams();
@@ -10,7 +11,7 @@ const Products = () => {
   useEffect(() => {
     if (categoryId) {
       // Obtener el nombre de la categoría del servidor
-      fetch(`http://localhost:8080/api/categories/${categoryId}`)
+      fetch(apiUrl(`/categories/${categoryId}`))
         .then(response => response.json())
         .then(category => {
           setCategoryName(category.name || '');

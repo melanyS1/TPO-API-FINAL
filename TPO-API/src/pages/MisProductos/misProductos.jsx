@@ -99,7 +99,18 @@ const MisProductos = () => {
 
   const startEdit = (product) => {
     setEditingId(product.id);
-    setForm({ name: product.name, price: product.price, stock: product.stock, description: product.description, image: product.image, categoryId: product.categoryId });
+    // Tomar el primer id de categoría si existe en el arreglo de categorías del producto
+    const currentCategoryId = Array.isArray(product.categories) && product.categories.length > 0
+      ? product.categories[0]?.id ?? ''
+      : '';
+    setForm({ 
+      name: product.name, 
+      price: product.price, 
+      stock: product.stock, 
+      description: product.description, 
+      image: product.image, 
+      categoryId: String(currentCategoryId)
+    });
     setShowCreate(false);
   };
 
@@ -119,16 +130,22 @@ const MisProductos = () => {
         throw new Error('No hay sesión activa. Por favor, inicia sesión.');
       }
 
-      // Enviar solo los campos necesarios en el formato esperado
-      const body = {
+      // Construir el body según PublicacionRequest del backend
+      const bodyBase = {
         name: form.name || original.name,
         price: parseFloat(form.price || original.price || '0'),
         stock: Number(form.stock || original.stock || '0'),
         description: form.description || original.description,
         image: form.image || original.image,
-        categoryId: form.categoryId || (original.categories?.[0] || ''),
-        sellerId: Number(original.sellerId) // Convertir a número
+        // Mantener featured si viene del backend, por defecto false
+        featured: Boolean(original.featured) || false
       };
+
+      // Si el usuario seleccionó una categoría, enviarla como array de IDs
+      // Caso contrario, no incluir "categories" para que el backend no las modifique
+      const body = form.categoryId
+        ? { ...bodyBase, categories: [ Number(form.categoryId) ] }
+        : bodyBase;
 
       const headers = getAuthHeaders();
       const res = await fetch(`${API_URL}/publicaciones/${id}`, {
