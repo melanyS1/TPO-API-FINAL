@@ -7,7 +7,7 @@
 .product-main img{width:80px;height:80px;object-fit:cover;border-radius:6px}
 .product-actions button{margin-left:8px}
 .product-form{display:flex;flex-direction:column;gap:10px;margin:8px 0;max-width:900px;width:100%}
-.product-form input,.product-form textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid #ddd;border-radius:4px;font-size:14px}
+.product-form input,.product-form textarea,.product-form select{width:100%;box-sizing:border-box;padding:10px;border:1px solid #ddd;border-radius:4px;font-size:14px}
 .upload-area{border:2px dashed #4da3ff;padding:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;position:relative;width:100%;box-sizing:border-box}
 .upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
 .upload-placeholder{color:#666;text-align:center}

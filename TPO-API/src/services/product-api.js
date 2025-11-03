@@ -34,21 +34,41 @@ function verifyStock(cart) {
   });
 }
 
-function getProducts() {
-  return fetch("http://localhost:3001/products")
-    .then((response) => response.json())
+function getProducts(categoryId = null) {
+  const baseUrl = "http://localhost:8080/api";
+  const url = categoryId 
+    ? `${baseUrl}/products/category/${categoryId}`
+    : `${baseUrl}/products`;
+    
+  console.log('Fetching products from URL:', url);
+  
+  return fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then((data) => {
-      // Aquí puedes manejar los datos de los productos
       console.log("Productos obtenidos:", data);
-      return data;
+      // Filter by category if specified
+      if (categoryId) {
+        const filtered = data.filter(product => 
+          // Check if product has this category in its categories array
+          product.categories && product.categories.some(cat => cat.id === Number(categoryId))
+        );
+        return filtered;
+      }
+      return data || [];
     })
     .catch((error) => {
       console.error("Error al obtener productos:", error);
+      return []; // Return empty array on error to avoid undefined
     });
 }
 
 function getProductById(id) {
-  return fetch(`http://localhost:3001/products/${id}`)
+  return fetch(`http://localhost:8080/api/products/${id}`)
     .then(response => {
       if (!response.ok) {
         throw new Error('Producto no encontrado');
@@ -66,7 +86,7 @@ function getProductById(id) {
 }
 
 function partialUpdateProductStock(id, newStock) {
-  return fetch(`http://localhost:3001/products/${id}`, {
+  return fetch(`http://localhost:8080/api/products/${id}`, {
     method: "PATCH", // Usamos PATCH para actualización parcial
     headers: {
       "Content-Type": "application/json",

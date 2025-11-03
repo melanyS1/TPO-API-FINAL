@@ -20,9 +20,9 @@ CREATE TABLE `users` (
 
 -- Insert initial users
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`) VALUES
-(1, 'juan123', 'juan@example.com', '$2a$10$6Y4h96Aqv1zOGRBPPDGsOOsr8TKX5dEE8lj0npDC6MCqNrWcfIJi', 'USER'),
-(2, 'maria456', 'maria@example.com', '$2a$10$6Y4h96Aqv1zOGRBPPDGsOOsr8TKX5dEE8lj0npDC6MCqNrWcfIJi', 'USER'),
-(3, 'gaby789', 'gaby@example.com', '$2a$10$6Y4h96Aqv1zOGRBPPDGsOOsr8TKX5dEE8lj0npDC6MCqNrWcfIJi', 'USER');
+(1, 'juan123', 'juan@example.com', '$2a$10$.QYKWz.lZFTn7D3l89PWrOkz8hyHD42OIuAvMMhiOj/UNsSpNlZy6', 'USER'),
+(2, 'maria456', 'maria@example.com', '$2a$10$.QYKWz.lZFTn7D3l89PWrOkz8hyHD42OIuAvMMhiOj/UNsSpNlZy6', 'USER'),
+(3, 'gaby789', 'gaby@example.com', '$2a$10$.QYKWz.lZFTn7D3l89PWrOkz8hyHD42OIuAvMMhiOj/UNsSpNlZy6', 'USER');
 
 -- Then create categories
 CREATE TABLE `categories` (

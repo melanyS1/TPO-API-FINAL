@@ -22,10 +22,18 @@ const Header = () => {
   const products = useGetProducts(searchTerm);
 
   useEffect(() => {
-    fetch('http://localhost:3001/categories')
-      .then(response => response.json())
-      .then(data => setCategories(data))
-      .catch(error => console.error('Error loading categories:', error));
+    fetch('http://localhost:8080/api/categories')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => setCategories(data || []))
+      .catch(error => {
+        console.error('Error loading categories:', error);
+        setCategories([]);
+      });
   }, []);
   
 

@@ -14,31 +14,51 @@ export function UserProvider({ children }) {
   const login = async (email, password) => {
     try {
       console.log('Attempting login for:', email);
-      const response = await fetch(`http://localhost:3001/users?email=${email}`);
+      console.log('Request payload:', { email, password });
+      
+      const response = await fetch('http://localhost:8080/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password })
+      });
+      
+      const responseText = await response.text();
+      console.log('Response status:', response.status);
+      console.log('Response body:', responseText);
       
       if (!response.ok) {
+        if (response.status === 400) {
+          return { success: false, error: 'Email o contraseña incorrectos: ' + responseText };
+        }
         console.error('Server response not ok:', response.status, response.statusText);
-        return { success: false, error: 'Error de conexión con el servidor' };
+        return { success: false, error: 'Error de conexión con el servidor: ' + responseText };
       }
+
+      // We already have the token in responseText
+      const token = responseText;
       
-      const users = await response.json();
-      console.log('Found users:', users.length);
-      
-      const matchedUser = users.find(u => u.email === email && u.password === password);
-      
-      if (matchedUser) {
-        // Remove password from user object before storing in state
-        const { password: _, ...userWithoutPassword } = matchedUser;
-        setUser(userWithoutPassword);
-        setIsAuthenticated(true);
-        localStorage.setItem('user', JSON.stringify(userWithoutPassword));
-        localStorage.setItem('isAuthenticated', 'true');
-        console.log('Login successful for user:', userWithoutPassword.username);
-        return { success: true };
-      } else {
-        console.log('No matching user found for:', email);
-        return { success: false, error: 'Email o contraseña incorrectos' };
+      // Get the user details using the token
+      const userResponse = await fetch('http://localhost:8080/api/auth/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!userResponse.ok) {
+        console.error('Error getting user details:', userResponse.status, userResponse.statusText);
+        return { success: false, error: 'Error obteniendo detalles del usuario' };
       }
+
+      const userDetails = await userResponse.json();
+      setUser(userDetails);
+      setIsAuthenticated(true);
+      localStorage.setItem('user', JSON.stringify(userDetails));
+      localStorage.setItem('token', token);
+      localStorage.setItem('isAuthenticated', 'true');
+      console.log('Login successful for user:', userDetails.username);
+      return { success: true };
     } catch (error) {
       console.error('Login error:', error);
       return { success: false, error: 'Error al intentar iniciar sesión: ' + error.message };
@@ -49,6 +69,7 @@ export function UserProvider({ children }) {
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     localStorage.removeItem('isAuthenticated');
   };
 

@@ -13,7 +13,7 @@ function useGetProductById(id) {
     
     async function fetchProduct() {
       try {
-        const data = await api.get(`/products/${id}`);
+        const data = await api.get(`/api/products/${id}`);
         if (isMounted) {
           setProduct(data);
           setLoading(false);

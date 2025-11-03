@@ -10,10 +10,10 @@ const Products = () => {
   useEffect(() => {
     if (categoryId) {
       // Obtener el nombre de la categoría del servidor
-      fetch(`http://localhost:3001/categories/${categoryId}`)
+      fetch(`http://localhost:8080/api/categories/${categoryId}`)
         .then(response => response.json())
         .then(category => {
-          setCategoryName(category.name);
+          setCategoryName(category.name || '');
         })
         .catch(error => console.error('Error loading category:', error));
     }
