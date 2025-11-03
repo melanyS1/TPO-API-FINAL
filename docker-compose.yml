@@ -39,5 +39,14 @@ services:
       db:
         condition: service_healthy
 
+  frontend:
+    build:
+      context: ./TPO-API
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80" # Serve the built app on host:5173
+    depends_on:
+      - backend
+
 volumes:
   mysql-data:

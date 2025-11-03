@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../Context/UserContext';
-import './MisProductos.css';
+import './misProductos.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
