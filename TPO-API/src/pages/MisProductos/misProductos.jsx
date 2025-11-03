@@ -86,7 +86,12 @@ const MisProductos = () => {
   const handleDelete = async (id) => {
     if (!confirm('¿Eliminar producto?')) return;
     try {
-      await fetch(`${API_URL}/products/${id}`, { method: 'DELETE' });
+      const headers = getAuthHeaders();
+      const res = await fetch(`${API_URL}/publicaciones/${id}`, { method: 'DELETE', headers });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || `Error al eliminar (${res.status})`);
+      }
       // actualizar la lista llamando a fetchProducts para mantener consistencia
       await fetchProducts();
       // hacer scroll al listado
