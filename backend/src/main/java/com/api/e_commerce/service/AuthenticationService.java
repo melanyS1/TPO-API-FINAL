@@ -71,18 +71,39 @@ public class AuthenticationService {
      *
      */
     public String authenticate(LoginRequest request) {
-        //verifica que exista el email y que la pass sea correcta
-        // busca el email en la db
-        // pass la encripta y la compara con la pass de la db
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        //para buscar el email se utiliza el método userDetailsService de SecurityConfig
-                        request.getEmail(),
-                        //para verificar si esta ok la pass se utiliza passwordEncoder, encripta la pass y la compara con la pass encriptada de la db
-                        request.getPassword()));
-
+        // Generate a known password hash that we can use
+        String knownHash = passwordEncoder.encode("123");
+        System.out.println("\nNew known hash for password '123': " + knownHash);
+        
+        System.out.println("\nAttempting authentication for email: " + request.getEmail());
+        
+        // First check if user exists
         var user = usuarioRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        System.out.println("Found user with email: " + user.getEmail());
+        System.out.println("User ID: " + user.getId());
+        System.out.println("User role: " + user.getRole());
+        System.out.println("Stored hashed password: " + user.getPassword());
+        
+        // Try to verify the actual stored password
+        boolean actualMatches = passwordEncoder.matches(request.getPassword(), user.getPassword());
+        System.out.println("\nVerification against stored hash: " + actualMatches);
+        
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()));
+            System.out.println("Authentication manager verification successful");
+        } catch (Exception e) {
+            System.out.println("Authentication manager verification failed: " + e.getMessage());
+            System.out.println("Exception type: " + e.getClass().getName());
+            
+            System.out.println("\nIMPORTANT: You need to update the password hash in the database to: " + knownHash);
+            
+            throw e;
+        }
         
         // Generate JWT token
         return jwtService.generateToken(user);
